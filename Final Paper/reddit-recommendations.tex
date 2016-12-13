@@ -89,6 +89,8 @@ In this paper, we focus on memory-based, collaborative filtering methods using i
 
 \paragraph{Length of Comments} A raw count of posts or comments does not give any sense of the post/comment quality .  Length of comments could be one way to gain additional insight into the “value” of a comment, with the assumption that longer comments may indicate a higher degree of interest.  However, shorter comments do not necessarily indicate a lesser degree of interest, as brevity on Reddit is common and some subreddit cultures tend toward a short comment style.  Since post titles have a character limit of 300, the length of post titles would not be an indicator of interest.  
 
+\paragraph{Post Scores} All posts and comments have a score (or number of points) based on the number of upvotes or downvotes it receives.  Reddit uses this score to determine which posts rise to the top of a subreddit home page or the top of the comments listed underneath each post.  The total number of points a user has received from all his or her posts on a particular subreddit can be a proxy for the “quality” or value of his or her contribution to that subreddit (in the opinion of other members of that subreddit community).  We infer that a user makes higher quality contributions to subreddits which he or she is more interested in.
+
 \paragraph{Shared Users} We infer than subreddits which share a greater number of users (based on posting and commenting history) are more related, and for each subreddit pair we calculate the percent of users who posted or commented on both subreddits in August.  We use these results to conduct item-based collaborative, expecting that items will be easier to characterize than users (there are likely more similarities between two basketball subreddits than two basketball fans).  Since items are typically less dynamic and fewer in number than users, item-based collaborative filtering can also help to address scalability issues.
 
 \paragraph{Text Similarity} In this content based approach, we consider the titles of posts in each subreddit and use term frequency-inverse document frequency (TF-IDF) to estimate similarity (see Section 2.3); similar methods could be applied to subreddit comments. Using the content of subreddits to generate recommendations would help to address the “cold start” problem, allowing users who do not have a post or comment history to find similar subreddits.  Although a new subreddit would not be evaluated until it has built up a post/comment history, this limitation is not necessarily negative, as it is not meaningful to recommend a subreddit which lacks any content.
@@ -218,7 +220,7 @@ greater dependence and greater similarity.
 
 \paragraph{Tanimoto Coefficient}
 
-This measure computes the
+\textcolor{red}{Clarify?} This measure computes the
 fraction that preference user $X$ and user $Y$ share a relation with the same items:\begin{align*}
 r_{X, Y} = \frac{\sum_i X_i \wedge Y_i}{\sum_i X_i \vee Y_i}
 \end{align*}
