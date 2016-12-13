@@ -1,0 +1,243 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2016
+%
+% to avoid loading the natbib package, add option nonatbib:
+%\usepackage[nonatbib]{nips_2016}
+
+%\usepackage{nips_2016}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+\usepackage[final]{nips_2016}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage[usenames, dvipsnames]{color}
+
+\title{Recommending Subreddits to Reddit Users}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+\author{
+  %% examples of more authors
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+\begin{document}
+% \nipsfinalcopy is no longer used
+
+\maketitle
+
+\begin{abstract}
+Maybe no abstract.
+\end{abstract}
+
+\section{Recommender Architecture}\label{sec:rec-arch}
+
+To build our recommenders, we use the Java package, Mahout. The code
+used to test the various algorithms in our package and to implement
+our subreddit recommender can be found on our Github repo page\footnote{https://github.com/qqliu/subreddit-recommendations}. The specific 
+architectures that are used are their collaborative filtering and item-based recommendation algorithms. 
+We use the following set of collaborative filtering similarity algorithms: 
+Pearson Correlation, Euclidean Distance, Log Likelihood, Tanimoto Coefficient, and Uncentered Cosine. 
+Once these similarities are calculated, we further use a neighborhood algorithm to 
+determine the nearest neighbors. This algorithm either finds the nearest
+$n$ neighbors or a threshold similarity where if the similarity of a specific user is
+greater than a score, then we include the items liked by these
+users. We briefly explain
+the pitfalls and advantages of each of these algorithms below. Furthermore, we evaluate the 
+accuracy of these algorithms by performing a series of hold-out experiments both by using the 
+evaluator code provided by the Mahout package and by implementing our own testing suite.
+
+\subsection{Similarity Measures}
+
+We used the following similarity measures and we explain what they are below:
+
+\paragraph{Pearson Correlation}
+
+The Pearson Correlation similarity measure looks at how similar data variation curves are from each other. 
+Specifically, given two items, we compute the following as the Pearson Correlation: 
+
+\begin{align*}
+r_{X, Y} = \frac{\sum_{x_i, y_i \in X, Y} (x_i - \overline{x})(y_i - \overline{y})}{\sqrt{\sum_{i = 1}^n (x_i - \overline{x})^2}\sqrt{\sum_{i=1}^n (y_i - \overline{y})^2}}
+\end{align*}
+
+where $x_i \in X$ and $y_i \in Y$ are data samples of $X$ and $Y$ respectively, $n$ is the total number of samples,
+and $\overline{x}$ and $\overline{y}$ are the means of all samples in $X$ and $Y$. In terms of users and 
+item preference ratings, $X$ is the set of item preferences of user $X$ and $Y$ is the set of item 
+preferences of user $Y$. 
+
+One advantage of this similarity measure is that the data is normalized to look at proportionality trends between 
+pairs of user preference vectors (essentially looking at the trends and the tendency of the values to move 
+together proportionally) rather than the actual values. For instance, points on two parallel lines have Pearson 
+correlation $1$ \textcolor{red}{NOTE: Check this.}. Therefore, this similarity measure is robust against user preferences that have different means and variances among different users. For instance, for users that
+posted to more than $25$ subreddits, the Pearson correlation similarity measure performed much
+better than all other similarity measures\textcolor{red}{NOTE: Check this}.
+
+The major disadvantage of this similarity measure is that users which only rated one item or rated all items the 
+same rating will have covariance $0$ which prevents any Mahout collaborative filtering algorithm based 
+on this measure from making a recommendation. Other similarity measures mentioned below will be better able
+to handle such sparsity of data. We see the effect of this in our results for data that includes users who have
+only made comments in $2 \leq n \leq 3$ subreddits (see Section~\ref{2-3-users}). 
+Using Pearson correlation, the predicted values matched poorly
+with the actual values. Furthermore, by removing the top ranked item, the data becomes too sparse for the recommendation algorithm to retrieve any meaningful recommendations (at least by the precision and recall measures).
+
+\paragraph{Euclidean Distance}
+
+This assumes items are dimensions and each user is a point in $\mathrm{R}^n$ where $n$ is the total
+number of ratable items. Then, for any two users, we compute the Euclidean distance between the two users.
+Then, the similarity $r$ between two users, $X$ and $Y$, is calculated by the following equation:
+
+\begin{align*}
+r_{X, Y} = \frac{\sqrt{n}}{1 + \sqrt{\sum_{x_i, y_i \in X, Y} (x_i - y_i)^2}}
+\end{align*}
+
+where the $\sqrt{n}$ is meant to help correct against users with more ratings automatically receiving lower scores. 
+(In fact, more similar ratings should indicate \emph{greater} similarity between users. Unlike the Pearson correlation,
+the Euclidean distance metric does not have a problem with sparse data sets, although this similarity measure 
+performs better when all points have approximately the same number of dimensions. (As we can see in Section
+~\ref{sec:set-com-posts}. \textcolor{red}{Check this!})
+
+\paragraph{Spearman Correlation}
+
+This is the same implementation as the Pearson correlation similarity except all preferences are ranked and the 
+rankings are used to compute the correlation value.
+
+\paragraph{Log Likelihood}
+
+This similarity measure computes the log likelihood of two ratings appearing together. Since, we are considering the log likelihood that two ratings appear together, we no longer take the The equation used for this evaluation is the following; given two items, $i$ and $j$, we can compute the number of users that have ratings for $i$ and $j$, $k_{i,j}$, the number of users
+who rated $i$ but not $j$, $k_{i,\overline{j}}$, the number of users who have rated $j$ but
+not $i$, $k_{\overline{i}, j}$, and the number of users who have rated neither $i$ or $j$, 
+$k_{\overline{i}, \overline{j}}$ (i.e. the values are in a coocurrence matrix, $K$). 
+The log likelihood of $i$ and $j$ occurring together is
+then:
+
+\begin{align*}
+r_{i, j} = 2 \left(\sum_{l \in {i, \overline{i}}, m \in {j, \overline{j}}} k_{l, m} \right)(H(K) - H(K_i) - H(K_j))
+\end{align*}
+
+where $N = \sum_{l \in {i, \overline{i}}, m \in {j, \overline{j}}} k_{l, m}$, $H = \sum_{l \in {i, \overline{i}}, m \in {j, \overline{j}}}\left(k/N \log(k/N)\right)$, and $K_i$ is a vector of row sums of $K$ and $K_j$ is a vector of column sums. Instead of thinking about $X$ and $Y$ as matrices of user ``events'' occurring together. For example, $k_{i, j}$ is the number of items that
+User $X$ and User $Y$ have interacted with, $k_{\overline{i}, j}$ is the count of items that User $Y$ have interacted
+with and User $X$ have not...etc. 
+
+The main advantage of this measure is that it allows for similarity measures based on boolean preferences or user
+interactions with items that do not have clear preferences. In fact, this similarity computes how \emph{unlikely} it is
+for two probability distributions to be independent (i.e. how likely they are dependent). So higher values indicate 
+greater dependence and greater similarity.
+
+\paragraph{Tanimoto Coefficient}
+
+This computes something called the Tanimoto coefficient between two users which is defined below. It computes the
+fraction that preference $X$ and $Y$ share a relation with the same items:
+
+\begin{align*}
+r_{X, Y} = \frac{\sum_i X_i \wedge Y_i}{\sum_i X_i \vee Y_i}
+\end{align*}
+
+This is a simpler similarity than the log likelihood measure and returns a value in $[0, 1]$. 
+
+\paragraph{Uncentered Cosine}
+
+If we imagine a user list of preferences for items is a vector in space, then the uncentered cosine similarity computes
+the cosine of the angle between these vectors. If the data is normalized, then this similarity measure calculates the
+same number as the Pearson correlation measure. Therefore, we only present a few results in Section~\ref{sec:results} related to this measure.
+
+\subsection{User Neighborhood}
+
+For collaborative filtering, we use the following two user neighborhood algorithms:
+
+\paragraph{Nearest N Neighbors} This returns the nearest $N$ users (i.e. users with the highest similarity to the current
+user) and bases recommendations on the nearest $N$ users. In our evaluations, we vary the neighborhood size to 
+determine the optimum neighborhood size. 
+
+\paragraph{Threshold-based neighborhood} Picks all users who have similarity greater than some threshold $k$. 
+
+\section{Results}\label{sec:results}
+
+We use three forms of evaluation to determine the effectiveness of each of the methods we test: two quantitative
+methods and one qualitative method. The two quantitative methods we use are two types of holdout experiments.
+In the first time, we hold a random portion of the training data set as the testing set. Then, we compute the 
+predicted preference values for each of the item-user pairs that was "held-out" and compute the error between
+the predicted preference values and the expected preference values (i.e. the actual preference values). We
+also compute the precision and recall of each evaluation based on how many of the returned values
+were held-out. Let $p$ be the precision value and $r$ be the recall value:
+
+\begin{align*}
+p = \frac{|\left\{ \text{relevant items} \right\} \cap \left\{\text{retrieved items}\right\}|}{|\left\{\text{retrieved items}\right\}|}
+\end{align*}
+
+\begin{align*}
+r = \frac{|\left\{ \text{relevant items} \right\} \cap \left\{\text{retrieved items}\right\}|}{|\left\{\text{relevant items}\right\}|}
+\end{align*} 
+
+where $\left\{relevant items\right\}$ is the set items that were ``held-out'' by the hold-out experiment and $\left\{retrieved items\right\}$ is the set of items returned as recommendations to users by the algorithm.
+
+For the qualitative test, we retrieved $60$ sets of $7$ recommendations for $60$ users and $40$ sets of randomly
+generated recommenders for $40$ ``user'' and evaluated the similarity between items in the set qualitatively by 5 
+people. More details about the method is provided in Section~\ref{sec:qualitative-evaluations}. 
+
+\subsection{Preference Values and Feature Mappings}
+
+Here, we explain our test results for the various feature mappings we used in Section~\ref{sec:feature-mapping}. 
+For each type of feature mapping, we test all algorithms mentioned in Section~\ref{sec:rev-arch} by varying user
+similarity measures and nearest neighbor parameters and threshold values. For these evaluations, 
+we perform both types of quantitative evaluations. For determining the error between predicted preferences and 
+the actual preferences based on the feature mappings, we use the root-mean-square error calculation and the average
+absolute value difference. Furthermore, we normalize the differences between feature values by dividing by the average
+amount each user rating differs from the mean of each user preference vector so that we can compare
+how different each predicted value is from a difference of one level of rating. 
+
+\subsection{Different Normalization Results}\label{sec:different-normalization}
+
+\subsection{Segmentation of Comments and Posts}\label{sec:set-com-posts}
+
+We find that segmenting the comments and posts into smaller groups and then, using a different similarity measure
+and collaborative filtering algorithm for each segment performed better by both our quantitative and qualitative
+measure than by feeding a large data set \emph{that is not segmented} into a recommender.
+
+\subsubsection{Users who commented or posted to $2$ or $3$ subreddits}\label{2-3-users}
+
+\subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
+
+\subsection{Qualitative Evaluations}\label{sec:qualitative-evaluations}
+
+\bibliography{ref}
+
+\end{document}
