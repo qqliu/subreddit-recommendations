@@ -222,7 +222,27 @@ we perform both types of quantitative evaluations. For determining the error bet
 the actual preferences based on the feature mappings, we use the root-mean-square error calculation and the average
 absolute value difference. Furthermore, we normalize the differences between feature values by dividing by the average
 amount each user rating differs from the mean of each user preference vector so that we can compare
-how different each predicted value is from a difference of one level of rating. 
+how different each predicted value is from a difference of one level of rating. The characteristics of each dataset is
+shown in Table~\ref{dataset-chars}.
+
+\begin{table}
+    \begin{tabular}{ |p{2.5cm}|p{2cm}|p{3cm}|p{3cm}|p{2.5cm}|}
+    \hline
+    File Type& Mean of User Means & Standard Deviation of User Means & Feature Value $-$ User Mean & RMS of Feature Val $-$ User Mean\\ \hline\hline
+    Num Comments (7632154)& 0.587 & 0.260 & 0.209 & 0.279 \\ \hline
+    Num Posts & 9C & 19C & Cloudy with rain, across many northern regions. Clear spells 
+    across most of Scotland and Northern Ireland, 
+    but rain reaching the far northwest. \\ \hline
+    Wednesday & 10C & 21C & Rain will still linger for the morning. 
+    Conditions will improve by early afternoon and continue 
+    throughout the evening. \\
+    \hline
+    \end{tabular}
+    \caption{Details about each file. We compute the mean and standard deviation of the mean of each user vector,
+     the mean difference between each user feature value and the mean of that user's feature values, and the root mean
+     square of the different between each user feature value and the mean of the user's feature values. 
+     Each file is normalized by dividing by the maximum feature value for each user.}\label{dataset-chars}
+\end{table}
 
 \subsection{Different Normalization Results}\label{sec:different-normalization}
 
