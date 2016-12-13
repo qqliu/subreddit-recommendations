@@ -23,6 +23,7 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage[usenames, dvipsnames]{color}
+\usepackage{longtable}
 
 \title{Recommending Subreddits to Reddit Users}
 
@@ -245,10 +246,65 @@ shown in Table~\ref{dataset-chars}.
 
 The results we obtain can be found in the following table:
 
-\begin{table}
-    \begin{tabular}{ |p{1.7cm}|p{1.9cm}|p{1.5cm}|p{1.5cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{1.5cm}|p{1.5cm}|}
+\begin{longtable}{ |p{1.7cm}|p{1.9cm}|p{1.5cm}|p{1.5cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{1.5cm}|p{1.5cm}|}
     \hline
     File & Sim Measure & \# Training & \# Testing & $N$ & $T$ & $H$ & RMS Err & Precision & Recall \\ \hline\hline
+    NC-TFIDF & Pearson & 76868938 & 76321 & 10 & N/A & N/A & 0.394 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 76321 & 10 & N/A & N/A & 0.342 & N/A & N/A   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321  & N/A &  10 & N/A& 0.353 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 76321  & 10 & N/A & 0.489 & N/A & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & 10 & N/A& N/A & 0.350 & N/A & N/A \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321 & 10 & N/A& N/A & 0.279 (Avg) & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & 10 & N/A & N/A & 0.289 (Avg) & N/A & N/A \\ \hline
+    
+    NC-TFIDF  & Pearson & 76868938 & 763 & 10 & N/A  & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 763 & 10 & N/A  & 2 & N/A & 0.230 & 0.291   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 763& 10 & N/A & 2 & N/A & 0.063 & 0.041  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 763 & 10 & N/A  & 2 & N/A &0.037 & 0.065 \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 763 & 10 & N/A  & 2 & N/A & 0.0 & 0.0 \\ \hline
+    
+    NC-TFIDF & Pearson & 76868938 & 76321 & 50 & N/A & N/A & 521 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 76321 & 50 & N/A & N/A & 0.343 & N/A & N/A   \\ \hline
+    NC-TFIDF  & Log & 1348092 & 76868938 & 76321 &  50 & N/A& 0.356 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 76321 & 50 & N/A & N/A & 399 & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & 50 & N/A& N/A & 0.362 & N/A & N/A \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321 & 50 & N/A& N/A & 0.300 (Avg) & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & 50 & N/A & N/A & 0.315 (Avg) & N/A & N/A \\ \hline
+    
+    NC-TFIDF  & Pearson & 76868938 & 763 & 50 & N/A  & 2 & N/A & 0.017 & 0.031  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 763 & 50 & N/A  & 2 & N/A &0.012 & 0.012   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 763 & 50 & N/A & 2 & N/A & 0.015 & 0.014  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 763& 50 & N/A  & 2 & N/A &0.0 & 0.0 \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 763 & 50 & N/A  & 2 & N/A & 0.048 & 0.031 \\ \hline
+   
+    NC-TFIDF & Pearson & 76868938 & 76321 & N/A & 0.1 & N/A & 0.278 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 76321 & N/A & 0.1 & N/A & 0.336 & N/A & N/A   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321 & N/A &  N/A & 0.1 & 0.341 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 76321 & N/A & 0.1 & N/A & 0.268 & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & N/A & 0.1 & N/A & 0.344 & N/A & N/A \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321 & N/A & 0.1 & N/A & 0.272 (Avg) & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & N/A & 0.1 & N/A & 0.294 (Avg) & N/A & N/A \\ \hline
+    
+    NC-TFIDF  & Pearson & 76868938 & 763 & N/A & 0.1 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 763 & N/A & 0.1 & 2 & N/A &0.0 & 0.0   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 763 & N/A & 0.1 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 763 & N/A & 0.1 & 2 & N/A &0.023 & 0.043 \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 763 & N/A & 0.1 & 2 & N/A & 0.0 & 0.0 \\ \hline
+    
+    NC-TFIDF & Pearson & 76868938 & 76321 & N/A & 0.5 & N/A & 0.272 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 76321 & N/A & 0.5 & N/A & 0.323 & N/A & N/A   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321 & N/A &  N/A & 0.5 & 0.333 & N/A & N/A  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 76321 & N/A & 0.5 & N/A & 0.317 & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & N/A & 0.5 & N/A & 0.327 & N/A & N/A \\ \hline
+    NC-TFIDF  & Log & 76868938 & 76321 & N/A & 0.5 & N/A & 0.282 (Avg) & N/A & N/A \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 76321 & N/A & 0.5 & N/A & 0.266 (Avg) & N/A & N/A \\ \hline
+    
+    NC-TFIDF  & Pearson & 76868938 & 763 & N/A & 0.5 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NC-TFIDF  & Euc Dist & 76868938 & 763 & N/A & 0.5 & 2 & N/A &0.0 & 0.0   \\ \hline
+    NC-TFIDF  & Log & 76868938 & 763 & N/A & 0.5 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NC-TFIDF  & Spearman & 76868938 & 763 & N/A & 0.5 & 2 & N/A &0.023 & 0.043 \\ \hline
+    NC-TFIDF  & Tanimoto & 76868938 & 763 & N/A & 0.5 & 2 & N/A & 0.0 & 0.0 \\ \hline
+    
     NP & Pearson & 6868938 & 76321 & 5 &  N/A & N/A & 0.999 & N/A & N/A  \\ \hline
     NP & Euc Dist & 6868938 & 76321 & 5 & N/A & N/A & 0.418 & N/A & N/A   \\ \hline
     NP & Log & 6868938 & 76321 & 5 &  N/A & N/A & 0.405 & N/A & N/A  \\ \hline
@@ -302,25 +358,260 @@ The results we obtain can be found in the following table:
     NP & Tanimoto & 6868938 & 763 & 10 & N/A & 3 & N/A & 0.0 & 0.0 \\ \hline
     NP & Spearman & 6868938 & 763 & 10 & N/A &  4 & N/A & 0.083 & 0.167 \\ \hline
     
-    NP & Pearson & 6868938 & 76321 & 15 &  N/A & N/A & 0.999 & N/A & N/A  \\ \hline
-    NP & Euc Dist & 6868938 & 76321 & 5 & N/A & N/A & 0.418 & N/A & N/A   \\ \hline
-    NP & Log & 6868938 & 76321 & 5 &  N/A & N/A & 0.405 & N/A & N/A  \\ \hline
-    NP & Spearman & 6868938 & 76321 & 5 & N/A & N/A & 0.167 & N/A & N/A \\ \hline
-    NP & Tanimoto & 6868938 & 76321 & 5 & N/A & N/A & 0.269 & N/A & N/A \\ \hline
-    NP & Log & 6868938 & 76321 & 5 & N/A & N/A & 0.203 (Avg) & N/A & N/A \\ \hline
-    NP & Tanimoto & 6868938 & 76321 & 5 & N/A & N/A & 0.254 (Avg) & N/A & N/A \\ \hline
+    NP & Pearson & 6868938 & 76321 & 50 &  N/A & N/A & 0.233 & N/A & N/A  \\ \hline
+    NP & Euc Dist & 6868938 & 76321 & 50 & N/A & N/A & 0.405 & N/A & N/A   \\ \hline
+    NP & Log & 6868938 & 76321 & 50 &  N/A & N/A & 0.387 & N/A & N/A  \\ \hline
+    NP & Spearman & 6868938 & 76321 & 50 & N/A & N/A & 0.999 & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & 50 & N/A & N/A & 0.373 & N/A & N/A \\ \hline
+    NP & Log & 6868938 & 76321 & 50 & N/A & N/A & 0.345 (Avg) & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & 50 & N/A & N/A & 0.261 (Avg) & N/A & N/A \\ \hline
     
-    NP & Pearson & 6868938 & 76321 & 10 &  N/A & N/A & 0.999 & N/A & N/A  \\ \hline
-    NP & Euc Dist & 6868938 & 76321 & 5 & N/A & N/A & 0.418 & N/A & N/A   \\ \hline
-    NP & Log & 6868938 & 76321 & 5 &  N/A & N/A & 0.405 & N/A & N/A  \\ \hline
-    NP & Spearman & 6868938 & 76321 & 5 & N/A & N/A & 0.167 & N/A & N/A \\ \hline
-    NP & Tanimoto & 6868938 & 76321 & 5 & N/A & N/A & 0.269 & N/A & N/A \\ \hline
-    NP & Log & 6868938 & 76321 & 5 & N/A & N/A & 0.203 (Avg) & N/A & N/A \\ \hline
-    NP & Tanimoto & 6868938 & 76321 & 5 & N/A & N/A & 0.254 (Avg) & N/A & N/A \\ \hline
+    NP & Pearson & 6868938 & 763 & 50 &  N/A & 1 & N/A & 1.0 & 0.031  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & 50 & N/A & 1 & N/A &0.024 & 0.027   \\ \hline
+    NP & Log & 6868938 & 763 & 50 &  N/A & 1 & N/A & 0.103 & 0.088  \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A & 1 & N/A &0.083 & 0.024 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & 50 & N/A & 1 & N/A & 0.097 & 0.086 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & 50 &  N/A & 2 & N/A & 0.5 & 0.1  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & 50 & N/A &  2 & N/A &0.056 & 0.071   \\ \hline
+    NP & Log & 6868938 & 763 & 50 &  N/A &  2 & N/A & 0.045 & 0.071 \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A &  2 & N/A & 0.056 & 0.038 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & 50 & N/A &  2 & N/A & 0.125 & 0.154 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & 50&  N/A & 3 & N/A & 0.333 & 0.25  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & 50 & N/A & 3  & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & 50 &  N/A & 3  & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A & 3  & N/A &0.056 & 0.0625 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & 50 & N/A & 3 & N/A & 0.333 & 0.5 \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A &  4 & N/A & 0.083 & 0.167 \\ \hline
+    
+    NP & Pearson & 6868938 & 76321 & 100 &  N/A & N/A & 0.390 & N/A & N/A  \\ \hline
+    NP & Euc Dist & 6868938 & 76321 & 100 & N/A & N/A & 0.379 & N/A & N/A   \\ \hline
+    NP & Log & 6868938 & 76321 & 100 &  N/A & N/A & 0.396 & N/A & N/A  \\ \hline
+    NP & Spearman & 6868938 & 76321 & 100 & N/A & N/A & 0.553 & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & 100 & N/A & N/A & 0.390 & N/A & N/A \\ \hline
+    NP & Log & 6868938 & 76321 & 100 & N/A & N/A & 0.344 (Avg) & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & 100 & N/A & N/A & 0.341 (Avg) & N/A & N/A \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & 50 &  N/A & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & 50 & N/A & 1 & N/A &0.024 & 0.024   \\ \hline
+    NP & Log & 6868938 & 763 & 50 &  N/A & 1 & N/A & 0.032 & 0.029  \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A & 1 & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & 50 & N/A & 1 & N/A & 0.032 & 0.029 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & 50 &  N/A & 2 & N/A & 0.5 & 0.1  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & 50 & N/A &  2 & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & 50 &  N/A &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & 50 & N/A &  2 & N/A & 0.042 & 0.077 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & 50&  N/A & 3 & N/A & 0.333 & 0.25  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & 50 & N/A & 3  & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & 50 &  N/A & 3  & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A & 3  & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & 50 & N/A & 3 & N/A & 0.333 & 0.5 \\ \hline
+    NP & Spearman & 6868938 & 763 & 50 & N/A &  4 & N/A & 0.083 & 0.0167 \\ \hline
+    
+    NP & Pearson & 6868938 & 76321 & N/A &  0.1 & N/A & 0.370 & N/A & N/A  \\ \hline
+    NP & Euc Dist & 6868938 & 76321 & N/A &  0.1 & N/A & 0.374 & N/A & N/A   \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.1 & N/A & 0.382 & N/A & N/A  \\ \hline
+    NP & Spearman & 6868938 & 76321 & N/A &  0.1 & N/A & N/A & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.1 & N/A & 0.382 & N/A & N/A \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.1 & N/A & 0.332 (Avg) & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.1 & N/A & 0.309 (Avg) & N/A & N/A \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.1 & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.1 & 1 & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.1 & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.1 & 1 & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.1 & 1 & N/A & 0.032 & 0.029 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.1 & 2 & N/A & 0.333 & 0.25  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.1 &  2 & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.1 &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.1 &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.1 &  2 & N/A & 0.0 & 0.0 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.1 & 3 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.1 & 3  & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.1 & 3  & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.1 & 3  & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.1 & 3 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.1 &  4 & N/A & 0.083 & 0.5 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.1 &  5 & N/A & 0.143 & 1.0 \\ \hline
+    
+    NP & Pearson & 6868938 & 76321 & N/A &  0.25 & N/A & 0.370 & N/A & N/A  \\ \hline
+    NP & Euc Dist & 6868938 & 76321 & N/A &  0.25 & N/A & 0.374 & N/A & N/A   \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.25 & N/A & 0.382 & N/A & N/A  \\ \hline
+    NP & Spearman & 6868938 & 76321 & N/A &  0.25 & N/A & N/A & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.25 & N/A & 0.382 & N/A & N/A \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.25 & N/A & 0.332 (Avg) & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.25 & N/A & 0.309 (Avg) & N/A & N/A \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.25 & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.25 & 1 & N/A &0.024 & 0.024   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.25 & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.25 & 1 & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.25 & 1 & N/A & 0.115 & 0.086 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.25 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.25 &  2 & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.25 &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.25 &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.25 &  2 & N/A & 0.25 & 0.23 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.25 & 3 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.25 & 3  & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.25 & 3  & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.25 & 3  & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.25 & 3 & N/A & 0.267 & 0.185 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.25 &  4 & N/A & 0.625 & 0.417 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.25 &  5 & N/A & 1.0 & 0.222 \\ \hline
+    
+    NP & Pearson & 6868938 & 76321 & N/A &  0.5 & N/A & N/A & N/A & N/A  \\ \hline
+    NP & Euc Dist & 6868938 & 76321 & N/A &  0.5 & N/A & 0.374 & N/A & N/A   \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.5 & N/A & 0.344 & N/A & N/A  \\ \hline
+    NP & Spearman & 6868938 & 76321 & N/A &  0.5 & N/A & N/A & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.5 & N/A & 0.381 & N/A & N/A \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.5 & N/A & 0.334 (Avg) & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.5 & N/A & 0.327 (Avg) & N/A & N/A \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.5  & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.5  & 1 & N/A &0.024 & 0.024   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.5  & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.5  & 1 & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.5  & 1 & N/A & 0.063 & 0.029 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.5  & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.5  &  2 & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.5  &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.5  &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.5  &  2 & N/A & NaN & 0.23 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.5  & 3 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.5  & 3  & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.5  & 3  & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.5  & 3  & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.5  & 3 & N/A & NaN & 0.185 \\ \hline
+    
+    NP & Pearson & 6868938 & 76321 & N/A &  0.5 & N/A & N/A & N/A & N/A  \\ \hline
+    NP & Euc Dist & 6868938 & 76321 & N/A &  0.5 & N/A & 0.374 & N/A & N/A   \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.5 & N/A & 0.344 & N/A & N/A  \\ \hline
+    NP & Spearman & 6868938 & 76321 & N/A &  0.5 & N/A & N/A & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.5 & N/A & 0.381 & N/A & N/A \\ \hline
+    NP & Log & 6868938 & 76321 & N/A &  0.5 & N/A & 0.334 (Avg) & N/A & N/A \\ \hline
+    NP & Tanimoto & 6868938 & 76321 & N/A &  0.5 & N/A & 0.327 (Avg) & N/A & N/A \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.5  & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.5  & 1 & N/A &0.024 & 0.024   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.5  & 1 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.5  & 1 & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.5  & 1 & N/A & 0.063 & 0.029 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.5  & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.5  &  2 & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.5  &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.5  &  2 & N/A & 0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.5  &  2 & N/A & NaN & 0.23 \\ \hline
+    
+    NP & Pearson & 6868938 & 763 & N/A &  0.5  & 3 & N/A & 0.0 & 0.0  \\ \hline
+    NP & Euc Dist & 6868938 & 763 & N/A &  0.5  & 3  & N/A &0.0 & 0.0   \\ \hline
+    NP & Log & 6868938 & 763 & N/A &  0.5  & 3  & N/A & 0.0 & 0.0  \\ \hline
+    NP & Spearman & 6868938 & 763 & N/A &  0.5  & 3  & N/A &0.0 & 0.0 \\ \hline
+    NP & Tanimoto & 6868938 & 763 & N/A &  0.5  & 3 & N/A & NaN & 0.185 \\ \hline
+    
+    NP-TFIDF & Pearson & 1348092 & 14978 & 10 & N/A & N/A & 0.118 & N/A & N/A  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 14978 & 10 & N/A & N/A & 0.346 & N/A & N/A   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & 10 & N/A &  N/A& 0.339 & N/A & N/A  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 14978 & 10 & N/A & N/A & 0.098  & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & 10 & N/A& N/A & 0.345 & N/A & N/A \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & 10 & N/A& N/A & 0.267 (Avg) & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & 10 & N/A & N/A & 0.292 (Avg) & N/A & N/A \\ \hline
+    
+    NP-TFIDF  & Pearson & 1348092 & 150 & 10 & N/A  & 2 & N/A & 0.1 & 0.111  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 150 & 10 & N/A  & 2 & N/A &0.0 & 0.0   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 150 & 10 & N/A & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 150 & 10 & N/A  & 2 & N/A &0.0 & 0.0 \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 150 & 10 & N/A  & 2 & N/A & 0.0 & 0.0 \\ \hline
+    
+    NP-TFIDF & Pearson & 1348092 & 14978 & 50 & N/A & N/A & N/A & N/A & N/A  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 14978 & 50 & N/A & N/A & 0.329 & N/A & N/A   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 &  50 & N/A & N/A & 0.326 & N/A & N/A  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 14978 & 50 & N/A & N/A & N/A & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & 50 & N/A& N/A & 0.323 & N/A & N/A \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & 50 & N/A& N/A & 0.281 (Avg) & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & 50 & N/A & N/A & 0.264 (Avg) & N/A & N/A \\ \hline
+    
+    NP-TFIDF  & Pearson & 1348092 & 150 & 50 & N/A  & 2 & N/A & 0.083 & 0.111  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 150 & 50 & N/A  & 2 & N/A &0.0 & 0.0   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 150 & 50 & N/A & 2 & N/A & 0.071 & 0.125  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 150 & 50 & N/A  & 2 & N/A &0.0 & 0.0 \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 150 & 50 & N/A  & 2 & N/A & 0.0 & 0.0 \\ \hline
+    
+    NP-TFIDF & Pearson & 1348092 & 14978 & N/A & 0.1 & N/A & NaN & N/A & N/A  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 14978 & N/A & 0.1 & N/A & 0.325 & N/A & N/A   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & N/A &  N/A & 0.1 & 0.311 & N/A & N/A  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 14978 & N/A & 0.1 & N/A & NaN & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & N/A & 0.1 & N/A & 0.307 & N/A & N/A \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & N/A & 0.1 & N/A & 0.255 (Avg) & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & N/A & 0.1 & N/A & 0.315 (Avg) & N/A & N/A \\ \hline
+    
+    NP-TFIDF  & Pearson & 1348092 & 150 & N/A & 0.1 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 150 & N/A & 0.1 & 2 & N/A &0.0 & 0.0   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 150 & N/A & 0.1 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 150 & N/A & 0.1 & 2 & N/A &0.0 & 0.0 \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 150 & N/A & 0.1 & 2 & N/A & NaN & 0.0 \\ \hline
+    
+    NP-TFIDF & Pearson & 1348092 & 14978 & N/A & 0.5 & N/A & NaN & N/A & N/A  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 14978 & N/A & 0.5 & N/A & 0.325 & N/A & N/A   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & N/A &  N/A & 0.5 & 0.340 & N/A & N/A  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 14978 & N/A & 0.5 & N/A & 0.268 & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & N/A & 0.5 & N/A & 0.337 & N/A & N/A \\ \hline
+    NP-TFIDF  & Log & 1348092 & 14978 & N/A & 0.5 & N/A & 0.262 (Avg) & N/A & N/A \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 14978 & N/A & 0.5 & N/A & 0.156 (Avg) & N/A & N/A \\ \hline
+    
+    NP-TFIDF  & Pearson & 1348092 & 150 & N/A & 0.5 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP-TFIDF  & Euc Dist & 1348092 & 150 & N/A & 0.5 & 2 & N/A &0.0 & 0.0   \\ \hline
+    NP-TFIDF  & Log & 1348092 & 150 & N/A & 0.5 & 2 & N/A & 0.0 & 0.0  \\ \hline
+    NP-TFIDF  & Spearman & 1348092 & 150 & N/A & 0.5 & 2 & N/A &0.0 & 0.0 \\ \hline
+    NP-TFIDF  & Tanimoto & 1348092 & 150 & N/A & 0.5 & 2 & N/A & NaN & 0.0 \\ \hline
+    
+    PS & Pearson & 1290680 & 14340 & 10 & N/A & N/A & 0.166 & N/A & N/A  \\ \hline
+    PS  & Euc Dist & 1290680 & 14340 & 10 & N/A & N/A & 0.167 & N/A & N/A   \\ \hline
+    PS & Log & 1290680 & 14340 & N/A &  10 & N/A& 0.280 & N/A & N/A  \\ \hline
+    PS & Spearman & 1290680 & 14340 & 10 & N/A & 0.226 & N/A & N/A & N/A \\ \hline
+    PS & Tanimoto & 1290680 & 14340 & 10 & N/A& N/A & 0.266 & N/A & N/A \\ \hline
+    PS & Log & 1290680 & 14340 & 10 & N/A& N/A & 0.149 (Avg) & N/A & N/A \\ \hline
+    PS & Tanimoto & 1290680 & 14340 & 10 & N/A & N/A & 0.174 (Avg) & N/A & N/A \\ \hline
+    
+    PS & Pearson & 1290680 & 14340 & 50 & N/A & N/A & 0.369 & N/A & N/A  \\ \hline
+    PS & Euc Dist & 1290680 & 14340 & 50 & N/A & N/A & 0.342 & N/A & N/A   \\ \hline
+    PS & Log & 1290680 & 14340 & N/A &  50 & N/A& 0.381 & N/A & N/A  \\ \hline
+    PS & Spearman & 1290680 & 14340 & 50 & N/A & N/A & 0.660 & N/A & N/A \\ \hline
+    PS & Tanimoto & 1290680 & 14340 & 50 & N/A& N/A & 0.307 & N/A & N/A \\ \hline
+    PS  & Log & 1290680 & 14340 & 50 & N/A& N/A & 0.209 (Avg) & N/A & N/A \\ \hline
+    PS & Tanimoto & 1290680 & 14340 & 50 & N/A & N/A & 0.173 (Avg) & N/A & N/A \\ \hline
+    
+    PS & Pearson & 1290680 & 14340 & N/A & 0.1 & N/A & 0.397 & N/A & N/A  \\ \hline
+    PS & Euc Dist & 1290680 & 14340 & N/A & 0.1 & N/A & 0.365 & N/A & N/A   \\ \hline
+    PS & Log & 1290680 & 14340 & N/A &  N/A & 0.1 & 0.245 & N/A & N/A  \\ \hline
+    PS  & Spearman & 1290680 & 14340 & N/A & 0.1 & N/A & 0.327 & N/A & N/A \\ \hline
+    PS  & Tanimoto & 1290680 & 14340 & N/A & 0.1 & N/A & 0.300 & N/A & N/A \\ \hline
+    PS  & Log & 1290680 & 14340 & N/A & 0.1 & N/A & 0.243 (Avg) & N/A & N/A \\ \hline
+    PS  & Tanimoto & 1290680 & 14340 & N/A & 0.1 & N/A & 0.333 (Avg) & N/A & N/A \\ \hline
+    
+    PS & Pearson & 1290680 & 14340 & N/A & 0.5 & N/A & 0.241 & N/A & N/A  \\ \hline
+    PS & Euc Dist & 1290680 & 14340 & N/A & 0.5 & N/A & 0.391 & N/A & N/A   \\ \hline
+    PS & Log & 1290680 & 14340 & N/A &  N/A & 0.5 & 0.388 & N/A & N/A  \\ \hline
+    PS & Spearman & 1290680 & 14340 & N/A & 0.5 & N/A & 0.478 & N/A & N/A \\ \hline
+    PS & Tanimoto & 1290680 & 14340 & N/A & 0.5 & N/A & NaN & N/A & N/A \\ \hline
+    PS & Log & 1290680 & 14340 & N/A & 0.5 & N/A & 0.242 (Avg) & N/A & N/A \\ \hline
+    PS & Tanimoto & 1290680 & 14340 & N/A & 0.5 & N/A & NaN & N/A & N/A \\ \hline
+    
+    
     \hline
-    \end{tabular}
     \caption{Training Percentage is $0.9$ and $0.01$ is tested. }\label{results-basic}
-\end{table}
+\end{longtable}
 
 \subsection{Different Normalization Results}\label{sec:different-normalization}
 
