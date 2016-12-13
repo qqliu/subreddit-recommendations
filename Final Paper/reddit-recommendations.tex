@@ -290,6 +290,13 @@ shown in Table~\ref{dataset-chars}.
      Each file is normalized by dividing by the maximum feature value for each user.}\label{dataset-chars}
 \end{table}
 
+We compare our results to a randomly generated file with $2,000,000$ lines. For the random file, we choose random 
+choose user and item pairs such that the expected number of ratings per user is $10$. We created a set of $20,000$ items
+where the items for each user is chosen uniformly at random from the set of total items. Furthermore, we compute a 
+rounded two-decimal rating from a Gaussian distribution with mean $0.7$ and standard deviation $0.17$. Using this
+file of random user ratings and item pairs, none of the models are able to train, meaning that all the files
+we provide have some form of correlation/are able to train a model whereas the random file cannot.
+
 The results we obtain can be found in the following table:
 
 \begin{longtable}{ |p{1.7cm}|p{1.9cm}|p{1.5cm}|p{1.5cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{1.5cm}|p{1.5cm}|}
@@ -707,7 +714,35 @@ The results we obtain can be found in the following table:
     NC-TFIDF (Log)  & Log & 4244356 & 471 & 50 & N/A & 2 & N/A & 0.071 & 0.125  \\ \hline
     NC-TFIDF (Log)  & Spearman & 4244356 & 471 & 50 & N/A  & 2 & N/A &0.023 & 0.043 \\ \hline
     NC-TFIDF (Log)  & Tanimoto & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.0 & 0.0 \\ \hline
+
+    ACL & Pearson & 4244356 & 47159 & 10 & N/A & N/A & 0.376 & N/A & N/A  \\ \hline
+    ACLACL & Euc Dist & 4244356 & 47159 & 10 & N/A & N/A & 0.399 & N/A & N/A   \\ \hline
+    ACL & Log & 4244356 & 47159 & N/A &  10 & N/A& 0.361 & N/A & N/A  \\ \hline
+    ACL & Spearman & 4244356 & 47159 & 10 & N/A & 0.401 & N/A & N/A & N/A \\ \hline
+    ACL & Tanimoto & 4244356 & 47159 & 10 & N/A& N/A & 0.347 & N/A & N/A \\ \hline
+    ACL & Log & 4244356 & 47159 & 10 & N/A& N/A & 0.301 (Avg) & N/A & N/A \\ \hline
+    ACL & Tanimoto & 4244356 & 47159 & 10 & N/A & N/A & 0.289 (Avg) & N/A & N/A \\ \hline
     
+    ACL  & Pearson & 4244356 & 471 & 10 & N/A  & 2 & N/A & 0.014 & 0.007  \\ \hline
+    ACL  & Euc Dist & 4244356 & 471 & 10 & N/A  & 2 & N/A &0.236 & 0.291   \\ \hline
+    ACL  & Log & 4244356 & 471 & 10 & N/A & 2 & N/A & 0.045 & 0.056  \\ \hline
+    ACL  & Spearman & 4244356 & 471 & 10 & N/A  & 2 & N/A &0.017 & 0.025 \\ \hline
+    ACL  & Tanimoto & 4244356 & 471 & 10 & N/A  & 2 & N/A & 0.087 & 0.036 \\ \hline
+    
+    ACL & Pearson & 4244356 & 47159 & 50 & N/A & N/A & 0.380 & N/A & N/A  \\ \hline
+    ACL & Euc Dist & 4244356 & 47159 & 50 & N/A & N/A & 0.364 & N/A & N/A   \\ \hline
+    ACL & Log & 4244356 & 47159 & N/A &  50 & N/A& 0.333 & N/A & N/A  \\ \hline
+    ACL & Spearman & 4244356 & 47159 & 50 & N/A & 0.376 & N/A & N/A & N/A \\ \hline
+    ACL & Tanimoto & 4244356 & 47159 & 50 & N/A& N/A & 0.348 & N/A & N/A \\ \hline
+    ACL & Log & 4244356 & 47159 & 50 & N/A& N/A & 0.281 (Avg) & N/A & N/A \\ \hline
+    ACL & Tanimoto & 4244356 & 47159 & 50 & N/A & N/A & 0.286 (Avg) & N/A & N/A \\ \hline
+    
+    ACL  & Pearson & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.0 & 0.0  \\ \hline
+    ACL  & Euc Dist & 4244356 & 471 & 50 & N/A  & 2 & N/A &0.008 & 0.017   \\ \hline
+    ACL  & Log & 4244356 & 471 & 50 & N/A & 2 & N/A & 0.044 & 0.083  \\ \hline
+    ACL  & Spearman & 4244356 & 471 & 50 & N/A  & 2 & N/A &0.0 & 0.0 \\ \hline
+    ACL  & Tanimoto & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.021 & 0.027 \\ \hline
+
     \hline
     \caption{Training Percentage is $0.9$ and $0.01$ is tested. $N$ is the number of nearest neighbors. $T$ is the threshold
     used in the Threshold algorithms. $H$ is the $H$-th highest rating items taken out from the set when calculating 
