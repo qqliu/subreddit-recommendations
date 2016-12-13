@@ -66,8 +66,55 @@
 \maketitle
 
 \begin{abstract}
-Maybe no abstract.
+[UPDATE OR DELETE] In this paper we discuss the challenges of designing a recommenders system for Reddit.  We implement both collaborative filtering and content based approaches, [evaluating the effects of various normalization techniques and similarity metrics].  
 \end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+Reddit is a prominent social media platform which uses a bulletin board style website for users to share content with other users. In order to help users organize into communities of interest, Reddit hosts over 850,000 subreddits, with hundreds more being created each day.  A recommender system which finds related subreddits would help new users quickly explore similar subreddits and may help existing users find unexpected subreddits related to their interests. Alternatively, marketers may be interested in finding all subreddits related to their niche area to subscribe to or make posts in to promote their product. A robust recommender system may even help uncover communities participating in illegal activity which would otherwise seek to remain hidden, assisting authorities who are seeking to shut down subreddits that perpetuate hate speech or enable crime (such as child pornography, theft of digital media, or trafficking of illicit substances).
+
+Recommender systems are broadly grouped into two strategies.  Content based systems focus on measuring similarity in the features of the item itself.  In contrast, collaborative filtering uses user feedback, either explicit (e.g. star ratings on Netflix) or implicit (e.g. a user’s viewing history), to find similarities between like-minded users.  The use of collaborative filtering methods based on implicit user feedback has grown in popularity with the availability of user behavioral data, but can present challenges such as sparse and/or noisy data, ambiguous data interpretation (no negative ratings), and the "cold start" problem (unable to evaluate new users or items).  
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Data Collection}
+In this paper, we focus on memory-based, collaborative filtering methods using implicit user feedback, although we attempt a limited implementation of content based, text similarity recommendations for a smaller subset of subreddits.  We use Reddit post and comment data from August 2016 made publicly available on Google BigQuery (7,591,689 posts and 69,654,819 comments by 3,698,088 unique users on 100,279 subreddits).\footnote{links to bigquery?} From this data set, we derived the following features:
+
+\paragraph{Number of Posts} There are two ways in which users can contribute content to Reddit, either by making a top-level post or by commenting on a post.  The number of top-level posts a user makes to a subreddit can be a proxy for the degree to which that user is interested in that subreddit.  
+
+\paragraph{Number of Comments} Similarly, number of comments can be used as an implicit indicator of user interest.  Comments are much more common than posts (by almost 10 to 1) and some users who never originate posts are nonetheless active commenters, so comments may provide more complete information on user preferences/behavior. 
+
+\paragraph{Length of Comments} A raw count of posts or comments does not give any sense of the post/comment quality .  Length of comments could be one way to gain additional insight into the “value” of a comment, with the assumption that longer comments may indicate a higher degree of interest.  However, shorter comments do not necessarily indicate a lesser degree of interest, as brevity on Reddit is common and some subreddit cultures tend toward a short comment style.  Since post titles have a character limit of 300, the length of post titles would not be an indicator of interest.  
+
+\paragraph{Shared Users} We infer than subreddits which share a greater number of users (based on posting and commenting history) are more related, and for each subreddit pair we calculate the percent of users who posted or commented on both subreddits in August.  We use these results to conduct item-based collaborative, expecting that items will be easier to characterize than users (there are more similarities between two basketball subreddits than two basketball fans).  Since items are typically less dynamic and fewer in number than users, item-based collaborative filtering can also help to address scale issues.
+
+\paragraph{Text Similarity} In this content based approach, we consider the titles of posts in each subreddit and use term frequency-inverse document frequency (TF-IDF) to estimate similarity (see Section 2.3); similar methods could be applied to subreddit comments. Using the content of subreddits to generate recommendations would help to address the “cold start” problem, allowing users who do not have a post or comment history to find similar subreddits.  Although a new subreddit would not be evaluated until it has built up a post/comment history, this limitation is not necessarily negative, as it is not meaningful to recommend a subreddit which lacks any content.
+
+\subsection{Data Preprocessing}
+The Reddit data set is both large and inherently noisy, challenges common to many recommender systems which rely on implicit ratings.  In order to reduce data set to a more manageable size, we first removed known bots  and default subreddits .  [PLACEHOLDER - We further reduced the data set by only selecting those remaining users who posted to at least 10 subreddits or more.   Unless otherwise noted, this data set was used in all the following evaluations.] 
+
+After reducing the data set, the next critical step was to normalize the data in order to account for differences in user behavior.  For example, in the August 2016 Reddit data set, users made anywhere from 1 to over 10,000 comments in one month.  In order to compare across users and subreddits, we experimented with a number of different normalization and weighting techniques.
+
+\paragraph{Log normalization} 
+\paragraph{Gaussian} 
+\paragraph{Other stuff?} 
+\paragraph{“TF-IDF-like” weighting} In order to account for the fact that user activity on an extremely popular subreddit (such as /r/AskReddit) is not as informative as activity on a more niche subreddit in characterizing a user’s preferences, we experiment with weighting our features with an “IDF-like” term which is given by [[FORMULA]] where N is the number of users who posted or commented to any subreddit and ns is the number of users who posted or commented to the subreddit s.  TF-IDF is discussed in greater detail in the next section, but this term should have the effect of reducing the significance of a users’ posts/comments on subreddits which have a large number of other users posting on it. 
+
+\subsection{Text processing}
+
+Preprocessing text and generating text-based numeric features required additional considerations.  In order to show proof of concept, we created a smaller data set from the post titles of the 5,000 most posted to subreddits that had less than 100,000 posts in August 2016 and were not default subreddits.   We then used a combination of regular expressions and packages from the Natural Language Toolkit (NLTK) to create a “bag of words” for each subreddit by removing all non-alphanumeric characters and capitalization, filtering for stop words (using a set of stop words provided by NLTK), tokenizing those words that were greater than two characters, and applying a Porter stemmer (as implemented by NLTK). 
+
+We use the TfidfVectorizer package from sklearn to transform our bag of words to a matrix of TF-IDF features.   TF-IDF is a well-known information retrieval weighting scheme which represents how significant a term is to a document in relation to how common that term is in the document and how rare that word is in the larger corpus of documents.  In our case, a document is the collection of all cleaned and tokenized titles posted on a subreddit in August 2016 and the corpus of documents is the entire set of subreddits.  
+
+We apply log or sublinear normalization to the term frequency (tf), to account for the fact that multiple occurrences of a term have less significance as the number of occurrences increases.  The log normalized term frequency (tfnorm), inverse document frequency (idf), and TF-IDF value for term t in document d are given by
+
+[[FORMULAS]]
+
+where N is the number of documents in the corpus and df is the number of documents in which the term t appears.
+
+We further apply L2 (Euclidean) normalization to the TF-IDF values, dividing each term by [[FORMULA]], where x is the vector of TF-IDF features.  Using this matrix of TF-IDF features, we compute pairwise cosine similarity by applying a linear kernel to the already L2-normalized data.
+
 
 \section{Recommender Architecture}\label{sec:rec-arch}
 
@@ -216,7 +263,7 @@ people. More details about the method is provided in Section~\ref{sec:qualitativ
 \subsection{Preference Values and Feature Mappings}
 
 Here, we explain our test results for the various feature mappings we used in Section~\ref{sec:feature-mapping}. 
-For each type of feature mapping, we test all algorithms mentioned in Section~\ref{sec:rev-arch} by varying user
+For each type of feature mapping, we test all algorithms mentioned in Section~\ref{sec:rec-arch} by varying user
 similarity measures and nearest neighbor parameters and threshold values. For these evaluations, 
 we perform both types of quantitative evaluations. For determining the error between predicted preferences and 
 the actual preferences based on the feature mappings, we use the root-mean-square error calculation and the average
