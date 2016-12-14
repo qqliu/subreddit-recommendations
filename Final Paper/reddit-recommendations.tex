@@ -41,6 +41,11 @@
 % author name.
 
 \author{
+Jessamyn Liu\\
+\texttt{jessamyn.liu@gmail.com}
+\And 
+Quanquan Liu\\
+\texttt{quanquan@mit.edu}
   %% examples of more authors
   %% \And
   %% Coauthor \\
@@ -70,7 +75,7 @@
 \maketitle
 
 \begin{abstract}
-\textcolor{red}{[UPDATE OR DELETE]} In this paper we discuss the challenges of designing a recommenders system for Reddit.  We implement both collaborative filtering and content based approaches, [evaluating the effects of various normalization techniques and similarity metrics].  
+In this paper we discuss the challenges of designing a recommenders system for Reddit.  We implement both collaborative filtering and content based approaches, [evaluating the effects of various normalization techniques and similarity metrics].  
 \end{abstract}
 
 \section{Introduction}
@@ -146,15 +151,15 @@ We further apply $L2$ (Euclidean) normalization to the TF-IDF values such that $
 
 \section{Recommender Architecture}\label{sec:rec-arch}
 
-To build our recommenders, we use the Java package Mahout. The code
+To build our recommenders, we use the Java package Mahout\footnote{https://mahout.apache.org}. The code
 used to test the various algorithms in our package and to implement
 our subreddit recommender can be found on our Github repo page\footnote{https://github.com/qqliu/subreddit-recommendations}. The specific 
-architectures that are used are the Mahout collaborative filtering and item-based recommendation algorithms. 
+architectures that are used are the Mahout collaborative filtering algorithms. 
 We use the following set of collaborative filtering similarity algorithms: 
-Pearson Correlation, Euclidean Distance, Log Likelihood, Tanimoto Coefficient, and Uncentered Cosine. 
+Pearson Correlation, Euclidean Distance, Log Likelihood, Tanimoto Coefficient, and Spearman Correlation. 
 Once these similarities are calculated, we further use a neighborhood algorithm to 
 determine the nearest neighbors. This algorithm either finds the nearest
-$n$ neighbors or a threshold similarity where if the similarity of a specific user is
+$n$ neighbors or uses a threshold similarity where if the similarity of a specific user is
 greater than a score, then we include the items liked by these
 users. We briefly explain
 the pitfalls and advantages of each of these algorithms below. Furthermore, we evaluate the 
@@ -270,6 +275,12 @@ r = \frac{|\left\{ \text{relevant items} \right\} \cap \left\{\text{retrieved it
 
 where $\left\{\text{relevant items}\right\}$ is the set items that were ``held-out'' by the hold-out experiment and $\left\{\text{retrieved items}\right\}$ is the set of items returned as recommendations to users by the algorithm.
 
+Here and throughout, we will use the following terms and notations: $N$ is the number of users 
+used in the Nearest N-Users neighborhood algorithm, $T$ is the threshold in the 
+Threshold algorithm for determining user neighborhoods, and $H$ is the top $H$-th 
+ratings held-out or removed from the training dataset and placed in the testing dataset
+to determine precision and recall. All file abbreviations can be found in Table~\ref{dataset-chars}.
+
 \subsection{Preference Values and Feature Mappings}
 
 Here, we explain our test results for the various feature mappings we used in Section~\ref{sec:feature-mapping}. 
@@ -277,21 +288,26 @@ For each type of feature mapping, we test all algorithms mentioned in Section~\r
 similarity measures and nearest neighbor parameters and threshold values. For these evaluations, 
 we perform both types of quantitative evaluations. For determining the error between predicted preferences and 
 the actual preferences based on the feature mappings, we use the root-mean-square error calculation and the average
-absolute value difference. Furthermore, we normalize the differences between feature values by dividing by the average
-amount each user rating differs from the mean of each user preference vector so that we can compare
-how different each predicted value is from a difference of one level of rating.\textcolor{red}{I do not understand this last sentence}) The characteristics of each dataset is
-shown in Table~\ref{dataset-chars}.
+absolute value difference. We use the RMS error calculations to compare similarity measures with each
+other to determine the best similarity measure to use for each feature mapping dataset. Then, we use the 
+precision and recall values to compare effectiveness of different feature mappings and normalizations
+with each other.
+%Furthermore, we normalize the differences between feature values by dividing by the average
+%amount each user rating differs from the mean of each user preference vector so that we can compare
+%how different each predicted value is from a difference of one level of rating.
+%\textcolor{red}{I do not understand this last sentence}) 
+The statistics of each dataset is shown in Table~\ref{dataset-chars}.
 
 \begin{table}
     \begin{tabular}{ |p{2.5cm}|p{2cm}|p{3cm}|p{3cm}|p{2.5cm}|}
     \hline
     File Type& Mean of User Means & Standard Deviation of User Means & Feature Value $-$ User Mean & RMS of Feature Val $-$ User Mean\\ \hline\hline
-    Num Comments (7632154)& 0.587 & 0.260 & 0.209 & 0.279 \\ \hline
-    Num Posts (1603887)& 0.713 & 0.189 & 0.137 & 0.213 \\ \hline
-    Num Posts TF-IDF (1497880) & 0.771 & 0.161 &  0.176 & 0.220 \\ \hline
-    Num Comments TF-IDF (4715952) & 0.713 & 0.189 & 0.216 & 0.262 \\ \hline
-    Avg Comment Length (7632044) & 0.594 & 0.187 & 0.229 & 0.283 \\ \hline
-    Posts Score (1434089) & 0.638 & 0.238 & 0.275 & 0.336 \\
+    Num Comments (NC; 7632154)& 0.587 & 0.260 & 0.209 & 0.279 \\ \hline
+    Num Posts (NP; 1603887)& 0.713 & 0.189 & 0.137 & 0.213 \\ \hline
+    Num Posts TF-IDF (NP-TFIDF; 1497880) & 0.771 & 0.161 &  0.176 & 0.220 \\ \hline
+    Num Comments TF-IDF (NC-TFIDF; 4715952) & 0.713 & 0.189 & 0.216 & 0.262 \\ \hline
+    Avg Comment Length (ACL; 7632044) & 0.594 & 0.187 & 0.229 & 0.283 \\ \hline
+    Posts Score (PS; 1434089) & 0.638 & 0.238 & 0.275 & 0.336 \\
     \hline
     \end{tabular}
     \caption{Details about each file. We compute the mean and standard deviation of the mean of each user vector,
@@ -308,23 +324,37 @@ we provide have some form of correlation/are able to train a model whereas the r
 
 \subsection{Feature Mapping and Recommendation Quantitative Results}\label{sec:feature-mapping}
 
-We considered the $6$ different feature mappings considered in Section~\ref{sec:feature-mapping}. For each of these
-feature mapping procedures, we test the $5$ similarity measures, Pearson, Euclidean Distance, Log Likelihood, 
+We considered the $6$ different feature mappings in this section. For each of these
+feature mapping procedures, we test the $5$ similarity measures, Pearson Correlation, Euclidean Distance, Log Likelihood, 
 Spearman Correlation, and Tanimoto Coefficient to determine the root-mean-square error between the predicted 
-preference of each user for a given subreddit that was held-out by the hold-out test. The lower the score, the 
+preference of each user for a given subreddit that was removed from the input file of ratings
+by the hold-out test. The lower the error score, the 
 greater the chance that preferences calculated by using the similarity measure matches preferences expressed 
-by the user by \emph{using a specific feature map}. We use the precision and recall to determine how correlated 
-user preferences are from this particular feature mapping. Note that since we use $0.9$ of the data for training
+by the user \emph{within a specific feature map}. We use the precision and recall to determine how well the recommender
+predicted subreddits the user \emph{already interacts with} using 
+this particular feature mapping. Note that since we use $0.9$ of the data for training
 and $0.01$ of the data for testing RMS error and $0.0001$ of the users for testing precision and recall, there
-could be variations in the number of users that are tested depending on how much data there is. The number of users used for testing can be found in
+could be variations in the number of users that are tested depending on how many users
+and how many interaction data there is. The number of users and amount 
+of item (subreddit) data used for testing can be found in
 Table~\ref{results-basic}.
 
 We found through our tests that the feature map that resulted in the greatest precision and recall was the 
 number of posts made to a particular subreddit. As can be seen in Fig.~\ref{fig:feature-map}, for instance,
 for $50$ neighbors and using Pearson correlation, the precision is $0.5$ and the recall is $0.1$ which 
-outperforms all other feature maps when using a neighborhood of $50$ and any of the other
-similarity algorithms. For both the NC-TFIDF and NP-TFIDF feature, maps, we see  a performance
-that is worse than the original NC and NP datasets in terms of recall. We use the RMS error to 
+outperforms all other feature maps when using the Nearest N-Neighbors
+algorithm with a neighborhood of $50$ and any of the other
+similarity measures. For both the NC-TFIDF and NP-TFIDF feature maps, we see a performance
+that is worse than the original NC and NP datasets in terms of both precision and recall. We 
+believe that one explanation for this observation is that the TFIDF algorithm might not be adding
+additional information to the dataset beyond what the number of posts within a subreddit 
+tells us. In fact, it could be masking some of this information by weighing factors that may 
+not be as important as user posting frequency. Fig.~\ref{fig:feature-map} shows an example
+testing trial. Table~\ref{results-basic} shows more testing results that follows the aforementioned 
+trends described above as well as the noted observations.
+
+We see the results of the best similarity measures for each feature map
+in Fig.~\ref{fig:feature-map}. To choose the similarity measure depicted, we use the RMS error to 
 determine the best similarity measure for each dataset and the precision and recall to compare 
 performance across datasets.
 
@@ -332,11 +362,25 @@ We believe that the number of posts performs the best out of all datasets becaus
 shows greater preference for the subreddit than commenting on a subreddit. Furthermore, users
 make fewer posts to fewer subreddits resulting in less noise than the comment dataset. 
 
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{img/sim-on-files.pdf}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{img/sim-on-files.pdf}
 \caption{Precision and recall due to different similarity measures that resulted in smallest
-root-mean-squared error.}\label{fig:feature-map}
+root-mean-squared error on different feature maps. We see that the Pearson correlation
+similarity measure on the number of posts data file performs better
+than other similarity measures for other files in terms of precision and performs
+not much worse in terms of recall.}\label{fig:feature-map}
 \end{figure} 
+
+Furthermore, we analyze the effect of different parameters (such as neighborhood size and threshold value)
+on the precision and recall of recommender algorithms using 
+ the Tanimoto coefficient and the Pearson correlation measure on the number of posts dataset. Here, 
+ $H$ represents the top $H$-ratings removed from $0.0001$ fraction which is 
+ $\approx 400$ users of the training feature map
+ set to be used as the testing set. Despite a few anomalies, we see as a general trend that both
+ precision and recall decreases as the user neighborhood increases beyond a certain point. It appears
+ that $N = 50$ and $t = 0.25$ are parameters that are most favorable in terms of \emph{both precision
+ and recall}.
 
 \begin{figure}[H]
 \centering
@@ -347,7 +391,7 @@ root-mean-squared error.}\label{fig:feature-map}
 \end{subfigure}%
 \begin{subfigure}{.4\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{img/nvp.pdf}
+  \includegraphics[width=.9\linewidth]{img/tvp.pdf}
   \label{fig:tvp}
 \end{subfigure}
 \begin{subfigure}{.4\textwidth}
@@ -361,16 +405,43 @@ root-mean-squared error.}\label{fig:feature-map}
   \label{fig:tvr}
 \end{subfigure}
 \caption{Precision and recall due to different similarity measures: Pearson correlation and
-Tanimoto coefficient.}\label{fig:learning-rate-hidden-layers}
+Tanimoto coefficient on the file mapping user preferences
+to the number of posts made in a subreddit. We vary the number of nearest
+neighbors and the threshold similarity value when computing 
+the neighborhood of similar users.}\label{fig:learning-rate-hidden-layers}
 \end{figure}
 
 \subsection{Different Normalization Results}\label{sec:different-normalization}
 
-Using the normalization methods mentioned in Section~\ref{sec:data-prepros}, we see that both NC-TFIDF and NP-TFIDF perform worse than NC and NP in terms of precision and recall. We can see these 
-results in Fig.~\ref{tfid-f-p} where we see the precision and recall of NP-TFIDF and NP given user neighborhoods
-$N =10, 50$ and $T = 0.1, 0.5$ and varying $H$. However, we see that both the logarithm normalization 
-perform better than the original dataset as can be seen In Fig.~\ref{varying-log-gaussian}, while (as expected), 
-the Gaussian normalization performs as well (approximately the same) as the original. 
+Using the normalization methods mentioned in Section~\ref{sec:data-prepros}, 
+we see that both NC-TFIDF and NP-TFIDF perform worse than NC and NP in 
+terms of precision and recall. We can see these 
+results in Fig.~\ref{fig:tfidf-p} where we see the precision and recall of NP-TFIDF and NP given user neighborhoods
+$N =10, 50$ and varying $H$. However, we see that the logarithm normalization 
+performs (somewhat surprisingly) worse on most of the similarity measures in terms of precision and recall
+than the original dataset as also can be seen In Fig.~\ref{fig:tfidf-p}. On the other hand, the 
+Gaussian normalization performs as well as the original and better in terms of
+both precision and recall for measures that do not normalize the input data--such as 
+Euclidean distance (as expected--
+since similarity measures as the Pearson correlation measure and other
+similarity measures that do not normalize as well--such as Euclidean distance--would be 
+expected to do better). 
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{.47\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{img/norm-n10.pdf}
+  \label{fig:norm-n10}
+\end{subfigure}
+\begin{subfigure}[t]{.47\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{img/norm-n50.pdf}
+  \label{fig:norm-n50}
+\end{subfigure}
+\caption{Precision and recall due to different normalization methods on the datasets: NP and NC (number
+of posts and number of comments).}\label{fig:tfidf-p}
+\end{figure}
  
 \subsection{Segmentation of Comments and Posts}\label{sec:set-com-posts}
 
@@ -378,15 +449,38 @@ We find that segmenting the comments and posts into smaller groups and applying 
 and collaborative filtering algorithm for each segment performed better than  feeding a large data set \emph{that is not segmented} into a recommender. For this procedure, 
 we test against the NC dataset since it contains the most number of ratings and the greatest variance
 in terms of the number of subreddits that users contributed to. We segment the ratings into the following segments: 
-ratings from users who contribute to [2, 3] subreddits, [4, 6] subreddits, [6, 15] subreddits, [15, 25] subreddits, [25, 50] 
+ratings from users who contribute to [2, 3] subreddits, [3, 6] subreddits, [6, 15] subreddits, [15, 25] subreddits, [25, 50] 
 subreddits, and, finally, [50-1000] subreddits. We see that segmenting the dataset
-resulted in greater precision and recall than the original NC dataset. Furthermore, different similarity 
-measures and recommender algorithm parameters performed better in each segment. 
+resulted in greater precision and recall than the original NC dataset for dataset segments in the
+range [2, 50]. For users that exhibit bot-like behavior (i.e. post to lots of different
+subreddits), the results show that the precision and recall rates are comparable
+to that of using similarity measures on the entire NC file. 
+
+Furthermore, different recommender algorithm parameters performed better in each segment as we discuss below. 
 
 \subsubsection{Users who commented or posted to $2$ or $3$ subreddits}\label{2-3-users}
 
+We only display the results for the Nearest N-Neighbors algorithm in Fig.~\ref{fig:learning-and-segments}
+since the threshold-based
+algorithm performed much worse (by an order of magnitude) in both precision and recall.
+
 Here, we see that the Tanimoto coefficient performs better than the Pearson coefficient (also 
-better than any other similarity measures). 
+better than any other similarity measures) for $N = 10$ and $H = 1$. The Pearson coefficient 
+performs slightly better than the Tanimoto coefficient when $N = 100$ and $H = 2$ in terms of 
+precision. However, the difference is not great enough to warrant choosing Pearson coefficient 
+rather than Tanimoto. Furthermore, the Pearson correlation measure may be slightly misleading 
+here since removing $1$ subreddit from a user reduces many users to only have one other 
+subreddit that they interacted with. This means that the Pearson correlation will not 
+return a similarity value for these users since there is not enough data left to compute a 
+correlation. This could potentially explain the low recall returned by Pearson correlation
+when $H = 1$.
+
+\subsubsection{Users who commented or posted to $3$ to $6$ subreddits}\label{3-6-users}
+
+Here, again as seen in Fig.~\ref{fig:learning-and-segments}, the Tanimoto coefficient performs better
+in terms of both precision and recall when $N = 10$ and performs slightly worse than Pearson when $N = 100$.
+The graphs for the case in Section~\ref{2-3-users} and here are very similar so we do not offer
+more insight in the trends of running the tests on this dataset than we offered before. 
 
 \subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
 
@@ -425,11 +519,30 @@ better than any other similarity measures).
 \caption{Precision and recall due to different similarity measures and different segmentation.}\label{fig:learning-and-segments}
 \end{figure}
 
+\subsubsection{Users who commented or posted to $6$ to $15$ subreddits}\label{6-15-users}
+
+Here, we see that the Tanimoto coefficient (especially when $H = 2$) performs solidly 
+better in terms of precision and recall than the Pearson correlation. Furthermore, we see
+that for $N = 10$, it performs much better than using the Tanimoto coefficient on the 
+total number of comments file (see Table~\ref{results-basic}). 
+
+\subsubsection{Users who commented or posted to $15$ to $1000$ subreddits}\label{15-1000-users}
+
+We do not mention these results explicitly since the values are small (less than $0.1$) for precision and
+do not offer us more insight than the above results on smaller number of subreddits. To see more the actual data
+please visit our Github repository\footnote{https://github.com/qqliu/subreddit-recommendations}.
+
 \section{Next Steps}\label{sec:qualitative-evaluations}
 
-For the qualitative test, we retrieved $60$ sets of $7$ recommendations for $60$ users and $40$ sets of randomly
-generated recommenders for $40$ ``users'' and evaluated the similarity between items in the set qualitatively by 5 
-people. More details about the method is provided in Section~\ref{sec:qualitative-evaluations}. 
+For our results, we performed on the orders of hundreds of quantitative tests based mainly 
+on precision and recall. However, these measures are very restricting in the sense that 
+we do not test whether actual users prefer such items. 
+In the future, if we continue this project, we retrieved sets of 
+ recommendations for users and compare to sets of randomly
+generated recommenders for to evaluate the similarity between items in the set qualitatively by 
+real people. We can obtain such a population through Amazon Turk or by setting
+up a web domain and having real users receive recommendations for subreddits
+based on their user account activity. 
 
 \section*{Appendix}
 
