@@ -24,6 +24,8 @@
 \usepackage{mathtools}
 \usepackage[usenames, dvipsnames]{color}
 \usepackage{longtable}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \title{Recommending Subreddits to Reddit Users}
 
@@ -327,7 +329,39 @@ performance across datasets.
 We believe that the number of posts performs the best out of all datasets because posting in a subreddit
 shows greater preference for the subreddit than commenting on a subreddit. Furthermore, users
 make fewer posts to fewer subreddits resulting in less noise than a dataset that has users
-make the same ratings for a lot of different items.  
+make the same ratings for a lot of different items. 
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{img/sim-on-files.pdf}
+\caption{Precision and recall due to different similarity measures that resulted in smallest
+root-mean-squared error.}\label{fig:feature-map}
+\end{figure} 
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/nvp.pdf}
+  \label{fig:nvp}
+\end{subfigure}%
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/nvp.pdf}
+  \label{fig:tvp}
+\end{subfigure}
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/nvr.pdf}
+  \label{fig:nvr}
+\end{subfigure}%
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/tvr.pdf}
+  \label{fig:tvr}
+\end{subfigure}
+\caption{Precision and recall due to different similarity measures: Pearson correlation and
+Tanimoto coefficient.}\label{fig:learning-rate-hidden-layers}
+\end{figure}
 
 \subsection{Different Normalization Results}\label{sec:different-normalization}
 
@@ -351,7 +385,8 @@ measures and recommender algorithm parameters performed better in each segment.
 
 \subsubsection{Users who commented or posted to $2$ or $3$ subreddits}\label{2-3-users}
 
-The Tanimoto coefficient similarity measure performed the best in this segment. 
+Here, we see that the Tanimoto coefficient performs better than the Pearson coefficient (also 
+better than any other similarity measures). 
 
 \subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
 
