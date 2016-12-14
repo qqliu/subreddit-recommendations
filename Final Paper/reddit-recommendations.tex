@@ -342,7 +342,7 @@ make the same ratings for a lot of different items.
 root-mean-squared error.}\label{fig:feature-map}
 \end{figure} 
 
-\begin{figure}[h]
+\begin{figure}[H!]
 \centering
 \begin{subfigure}{.4\textwidth}
   \centering
@@ -395,9 +395,42 @@ better than any other similarity measures).
 
 \subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
 
-\subsection{Qualitative Evaluations}\label{sec:qualitative-evaluations}
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.25\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{img/2-3-p.pdf}
+  \label{fig:2-3-p}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{img/3-6-p.pdf}
+  \label{fig:3-6-p}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{img/6-15-p.pdf}
+  \label{fig:6-15-p}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{img/2-3.pdf}
+  \label{fig:2-3}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{img/3-6.pdf}
+  \label{fig:3-6}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{img/6-15.pdf}
+  \label{fig:2-3}
+\end{subfigure}
+\caption{Precision and recall due to different similarity measures and different segmentation.}\label{fig:learning-and-segments}
+\end{figure}
 
-\section{Next Steps}
+\section{Next Steps}\label{sec:qualitative-evaluations}
 
 For the qualitative test, we retrieved $60$ sets of $7$ recommendations for $60$ users and $40$ sets of randomly
 generated recommenders for $40$ ``users'' and evaluated the similarity between items in the set qualitatively by 5 
