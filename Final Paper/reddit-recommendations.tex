@@ -299,14 +299,11 @@ shown in Table~\ref{dataset-chars}.
      Each file is normalized by dividing by the maximum feature value for each user.}\label{dataset-chars}
 \end{table}
 
-We compare our results to a randomly generated file with $2,000,000$ lines. For the random file, we choose random 
-choose user and item pairs such that the expected number of ratings per user is $10$. We created a set of $20,000$ items
+We compare our results to a randomly generated file with $2,000,000$ lines. For the random file, we choose random user and item pairs such that the expected number of ratings per user is $10$. We created a set of $20,000$ items
 where the items for each user is chosen uniformly at random from the set of total items. Furthermore, we compute a 
-rounded two-decimal rating from a Gaussian distribution with mean $0.7$ and standard deviation $0.17$. Using this
+rounded two-decimal rating from a Gaussian distribution with mean $0.7$ and standard deviation $0.17$, similar to the mean and standard deviation for the features derived from the number of posts. Using this
 file of random user ratings and item pairs, none of the models are able to train, meaning that all the files
 we provide have some form of correlation/are able to train a model whereas the random file cannot.
-
-The results we obtain can be found in the following table:
 
 \subsection{Feature Mapping and Recommendation Quantitative Results}\label{sec:feature-mapping}
 
