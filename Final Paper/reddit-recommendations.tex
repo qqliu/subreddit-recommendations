@@ -114,7 +114,11 @@ where $\hat{F}_{b}(a)$ is the feedback for subreddit $a$ by user $b$ and $\bar{F
 %\paragraph{\textcolor{red}{Other stuff?} }
 \paragraph{“TF-IDF-like” Weighting} In order to account for the fact that user activity on an extremely popular subreddit is not as informative as activity on a more niche subreddit in characterizing a user’s preferences, we experimented with weighting our features with an “IDF-like” term which is given by $log(\frac{N}{n_s})$ where $N$ is the number of users who posted or commented to any subreddit and $n_s$ is the number of users who posted or commented to the subreddit s.  TF-IDF is discussed in greater detail in the next section, but this term should have the effect of reducing the significance of a user's posts/comments on subreddits which have a large number of other users posting on it. 
 
-\paragraph{Segmentation} Finally, we segmented our data set by the number of subreddits which each user posted or commented to (for example users who post to 2-4 subreddits, 4-15 subreddits, etc).  Users who are active on only a few subreddits may lead to abnormally high ratings and skew the similarity measures (a user who posts the same amount to two subreddits would give each subreddit his maximum rating).  By segmenting our data, we were able to select the best recommender for each category of user. 
+\paragraph{Segmentation} Finally, we segmented our data set by the number of subreddits which each user posted or commented to (for example users who post to 2-4 subreddits, 4-15 subreddits, etc).  Users who are active on only a few subreddits may lead to abnormally high ratings and skew the similarity measures (a user who posts the same amount to two subreddits would give each subreddit his maximum rating).  By segmenting our data, we were able to select the best recommender for each category of user. We believe that users who comment or post to approximately the same 
+number of subreddits are more similar to each other than to users who post in significantly different number of subreddits. Furthermore, we would like to see whether different similarity measures and parameters will result in the best 
+recommendations for different segments. If this is the case, then, one could potentially first categorize an user
+based on the number of different subreddits she has posted to and then use that segment's recommender to 
+recommend similar subreddits.
 %\textcolor{red}{please check this paragraph - I kind of made it up}
 
 \subsection{Text processing}
@@ -173,9 +177,9 @@ preferences of user $Y$.
 One advantage of this similarity measure is that the data is normalized to look at proportionality trends between 
 pairs of user preference vectors (essentially looking at the trends and the tendency of the values to move 
 together proportionally) rather than the actual values. For instance, points on two parallel lines have Pearson 
-correlation $1$ \textcolor{red}{NOTE: Check this.}. Therefore, this similarity measure is robust against user preferences that have different means and variances among different users. For instance, for users who
+correlation $1$. Therefore, this similarity measure is robust against user preferences that have different means and variances among different users. For instance, for users who
 posted to more than $25$ subreddits, the Pearson correlation similarity measure performed much
-better than all other similarity measures\textcolor{red}{NOTE: Check this}.
+better than all other similarity measures.
 
 The major disadvantage of this similarity measure is that users who only rated one item or rated all items the 
 same rating will have covariance $0$ which prevents any Mahout collaborative filtering algorithm based 
@@ -196,8 +200,7 @@ r_{X, Y} = \frac{\sqrt{n}}{1 + \sqrt{\sum_{x_i, y_i \in X, Y} (x_i - y_i)^2}}
 where the $\sqrt{n}$ is meant to help correct against users with more ratings automatically receiving lower scores. 
 (In fact, more similar ratings should indicate \emph{greater} similarity between users.) Unlike the Pearson correlation,
 the Euclidean distance metric does not have a problem with sparse data sets, although this similarity measure 
-performs better when all points have approximately the same number of dimensions. (As we can see in Section
-~\ref{sec:set-com-posts}. \textcolor{red}{Check this!})
+performs better when all points have approximately the same number of dimensions. 
 
 \paragraph{Spearman Correlation}
 
@@ -224,7 +227,11 @@ greater dependence and greater similarity.
 
 \paragraph{Tanimoto Coefficient}
 
-\textcolor{red}{Clarify?} This measure computes the
+The Tanimoto coefficient is another similarity measure meant for boolean
+data. Intuitively, it computes the fraction of items that are rated
+by both users over the total number of items that are rated by 
+either or both users. If two users interacted with more of the
+same items, then they are more likely to be similar in tastes. This measure computes the
 fraction that preference user $X$ and user $Y$ share a relation with the same items:\begin{align*}
 r_{X, Y} = \frac{\sum_i X_i \wedge Y_i}{\sum_i X_i \vee Y_i}
 \end{align*}
@@ -243,12 +250,12 @@ same number as the Pearson correlation measure. Therefore, we only present a few
 user) and bases recommendations on the nearest $N$ users. In our evaluations, we vary the neighborhood size to 
 determine the optimum neighborhood size. 
 
-\paragraph{Threshold-based neighborhood} Picks all users who have similarity greater than threshold $k$. 
+\paragraph{Threshold-based neighborhood} The threshold-based neighborhood algorithm picks all users who have similarity greater than threshold $k$. All of these user's preferences are then factored into the computation of the recommendations.
 
 \section{Results}\label{sec:results}
 
-We use three forms of evaluation to determine the effectiveness of each of the methods we test: two quantitative
-methods and one qualitative method. The two quantitative methods we use are two types of holdout experiments.
+We use two forms of quantitative evaluations to determine the effectiveness of each of the methods we test.
+The two quantitative methods we use are two types of holdout experiments.
 In the first instance, we hold a random portion of the training data set as the testing set. Then, we compute the 
 predicted preference values for each of the item-user pairs that was "held-out" and compute the error between
 the predicted preference values and the expected preference values (i.e. the actual preference values). We
@@ -260,11 +267,7 @@ p = \frac{|\left\{ \text{relevant items} \right\} \cap \left\{\text{retrieved it
 r = \frac{|\left\{ \text{relevant items} \right\} \cap \left\{\text{retrieved items}\right\}|}{|\left\{\text{relevant items}\right\}|}
 \end{align*} 
 
-where $\left\{relevant items\right\}$ is the set items that were ``held-out'' by the hold-out experiment and $\left\{retrieved items\right\}$ is the set of items returned as recommendations to users by the algorithm.
-
-For the qualitative test, we retrieved $60$ sets of $7$ recommendations for $60$ users and $40$ sets of randomly
-generated recommenders for $40$ ``users'' and evaluated the similarity between items in the set qualitatively by 5 
-people. More details about the method is provided in Section~\ref{sec:qualitative-evaluations}. 
+where $\left\{\text{relevant items}\right\}$ is the set items that were ``held-out'' by the hold-out experiment and $\left\{\text{retrieved items}\right\}$ is the set of items returned as recommendations to users by the algorithm.
 
 \subsection{Preference Values and Feature Mappings}
 
@@ -393,6 +396,14 @@ better than any other similarity measures).
 \subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
 
 \subsection{Qualitative Evaluations}\label{sec:qualitative-evaluations}
+
+\section{Next Steps}
+
+For the qualitative test, we retrieved $60$ sets of $7$ recommendations for $60$ users and $40$ sets of randomly
+generated recommenders for $40$ ``users'' and evaluated the similarity between items in the set qualitatively by 5 
+people. More details about the method is provided in Section~\ref{sec:qualitative-evaluations}. 
+
+\section*{Appendix}
 
 \begin{longtable}{ |p{1.7cm}|p{1.9cm}|p{1.5cm}|p{1.5cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{1.5cm}|p{1.5cm}|}
     \hline
