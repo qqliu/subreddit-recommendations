@@ -24,6 +24,8 @@
 \usepackage{mathtools}
 \usepackage[usenames, dvipsnames]{color}
 \usepackage{longtable}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \title{Recommending Subreddits to Reddit Users}
 
@@ -95,7 +97,7 @@ In this paper, we focus on memory-based, collaborative filtering methods using i
 
 \paragraph{Text Similarity} In this content based approach, we consider the titles of posts in each subreddit and use term frequency-inverse document frequency (TF-IDF) to estimate similarity (see Section 2.3); similar methods could be applied to subreddit comments. Using the content of subreddits to generate recommendations would help to address the “cold start” problem, allowing users who do not have a post or comment history to find similar subreddits.  Although a new subreddit would not be evaluated until it has built up a post/comment history, this limitation is not necessarily negative, as it is not meaningful to recommend a subreddit which lacks any content.
 
-\subsection{Data Preprocessing}
+\subsection{Data Preprocessing}\label{sec:data-prepros}
 The Reddit data set is both large and inherently noisy, challenges common to many recommender systems which rely on implicit feedback.  In order to reduce data set to a more manageable size, we first removed known bots\footnote{Bots were identified by manually checking all those users with >3000 comments in one month and also by scraping /r/botWatcher for the names of all bots mentioned in the 500 most recent posts.  There are inevitably bots that remain unidentified in our data set, however we identified 955 bots (190 active) which accounted for 9.2\% of total posts and comments in August 2016.} and default subreddits\footnote{There are 49 default subreddits which all users are automatically subscribed to when they sign-up for a new account.  These subreddits are also linked at the top of every Reddit page and accounted for 17.6\% of all posts and comments in August 2016.}.  \textcolor{red}{[PLACEHOLDER - We further reduced the data set by only selecting those remaining users who posted to at least 10 subreddits or more.  Unless otherwise noted, this data set was used in all the following evaluations.]} 
 
 After reducing the data set, the next critical step was to normalize the data in order to account for differences in user behavior.  For example, in the August 2016 Reddit data set, users made anywhere from 1 to over 10,000 comments in one month.  In order to compare across users and subreddits, we experimented with a number of different normalization, weighting, and segmentation techniques.
@@ -300,6 +302,95 @@ file of random user ratings and item pairs, none of the models are able to train
 we provide have some form of correlation/are able to train a model whereas the random file cannot.
 
 The results we obtain can be found in the following table:
+
+\subsection{Feature Mapping and Recommendation Quantitative Results}\label{sec:feature-mapping}
+
+We considered the $6$ different feature mappings considered in Section~\ref{sec:feature-mapping}. For each of these
+feature mapping procedures, we test the $5$ similarity measures, Pearson, Euclidean Distance, Log Likelihood, 
+Spearman Correlation, and Tanimoto Coefficient to determine the root-mean-square error between the predicted 
+preference of each user for a given subreddit that was held-out by the hold-out test. The lower the score, the 
+greater the chance that preferences calculated by using the similarity measure matches preferences expressed 
+by the user by \emph{using a specific feature map}. We use the precision and recall to determine how correlated 
+user preferences are from this particular feature mapping. Note that since we use $0.9$ of the data for training
+and $0.01$ of the data for testing RMS error and $0.0001$ of the users for testing precision and recall, there
+could be variations in the number of users that are tested depending on how much data there is. However,
+we believe that this should not greatly affect our results. The number of users used for testing can be found in
+Table~\ref{results-basic}.
+
+We found through our tests that the feature map that resulted in the greatest precision and recall was the 
+number of posts made to a particular subreddit. As can be seen in Fig.~\ref{fig:feature-map}, for instance,
+for $50$ neighbors and using Pearson correlation, the precision is $0.5$ and the recall is $0.1$ which 
+outperforms all other feature maps when using a neighborhood of $50$ and any of the other
+similarity algorithms. For both the NC-TFIDF and NP-TFIDF feature, maps, we see  a performance
+that is worse than the original NC and NP datasets in terms of recall. We use the RMS error to 
+determine the best similarity measure for each dataset and the precision and recall to compare 
+performance across datasets.
+
+We believe that the number of posts performs the best out of all datasets because posting in a subreddit
+shows greater preference for the subreddit than commenting on a subreddit. Furthermore, users
+make fewer posts to fewer subreddits resulting in less noise than a dataset that has users
+make the same ratings for a lot of different items. 
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{img/sim-on-files.pdf}
+\caption{Precision and recall due to different similarity measures that resulted in smallest
+root-mean-squared error.}\label{fig:feature-map}
+\end{figure} 
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/nvp.pdf}
+  \label{fig:nvp}
+\end{subfigure}%
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/nvp.pdf}
+  \label{fig:tvp}
+\end{subfigure}
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/nvr.pdf}
+  \label{fig:nvr}
+\end{subfigure}%
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/tvr.pdf}
+  \label{fig:tvr}
+\end{subfigure}
+\caption{Precision and recall due to different similarity measures: Pearson correlation and
+Tanimoto coefficient.}\label{fig:learning-rate-hidden-layers}
+\end{figure}
+
+\subsection{Different Normalization Results}\label{sec:different-normalization}
+
+We use the normalization methods mentioned in Section~\ref{sec:data-prepros}. We see that both NC-TFIDF and NP-TFIDF perform worse than NC and NP in terms of precision and recall. We can see these 
+results in Fig.~\ref{tfid-f-p} where we see the precision and recall of NP-TFIDF and NP given user neighborhoods
+$N =10, 50$ and $T = 0.1, 0.5$ and varying $H$. However, we see that both the logarithm normalization 
+perform better than the original dataset as can be seen In Fig.~\ref{varying-log-gaussian}, while (as expected), 
+the Gaussian normalization performs as well (approximately the same) as the original. 
+ 
+\subsection{Segmentation of Comments and Posts}\label{sec:set-com-posts}
+
+We find that segmenting the comments and posts into smaller groups and then, using a different similarity measure
+and collaborative filtering algorithm for each segment performed better by both our quantitative and qualitative
+measure than by feeding a large data set \emph{that is not segmented} into a recommender. For this procedure, 
+we test against the NC dataset since it contains the most number of ratings and the greatest variance
+in terms of the number of subreddits that users contributed to. We segment the ratings into the following segments: 
+ratings from users who contribute to [2, 3] subreddits, [4, 6] subreddits, [6, 15] subreddits, [15, 25], subreddits, [25, 50] 
+subreddits, and, finally, [50-1000] subreddits. We see that as we believed, segmenting the dataset
+resulted in greater precision and recall than the original NC dataset. Furthermore, different similarity 
+measures and recommender algorithm parameters performed better in each segment. 
+
+\subsubsection{Users who commented or posted to $2$ or $3$ subreddits}\label{2-3-users}
+
+Here, we see that the Tanimoto coefficient performs better than the Pearson coefficient (also 
+better than any other similarity measures). 
+
+\subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
+
+\subsection{Qualitative Evaluations}\label{sec:qualitative-evaluations}
 
 \begin{longtable}{ |p{1.7cm}|p{1.9cm}|p{1.5cm}|p{1.5cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{1.5cm}|p{1.5cm}|}
     \hline
@@ -768,20 +859,6 @@ The results we obtain can be found in the following table:
     used in the Threshold algorithms. $H$ is the $H$-th highest rating items taken out from the set when calculating 
     precision and recall. RMS Err is the root-mean-square error. Precision and recall are as defined above.}\label{results-basic}
 \end{longtable}
-
-\subsection{Different Normalization Results}\label{sec:different-normalization}
-
-\subsection{Segmentation of Comments and Posts}\label{sec:set-com-posts}
-
-We find that segmenting the comments and posts into smaller groups and then, using a different similarity measure
-and collaborative filtering algorithm for each segment performed better by both our quantitative and qualitative
-measure than by feeding a large data set \emph{that is not segmented} into a recommender.
-
-\subsubsection{Users who commented or posted to $2$ or $3$ subreddits}\label{2-3-users}
-
-\subsubsection{Users who commented or posted to more than $25$ subreddits}\label{more-than-25}
-
-\subsection{Qualitative Evaluations}\label{sec:qualitative-evaluations}
 
 \bibliography{ref}
 
