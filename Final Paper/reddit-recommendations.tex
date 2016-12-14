@@ -532,29 +532,6 @@ We do not mention these results explicitly since the values are small (less than
 do not offer us more insight than the above results on smaller number of subreddits. To see more the actual data
 please visit our Github repository\footnote{https://github.com/qqliu/subreddit-recommendations}.
 
-\subsubsection{Text similarity metrics}
-We generated pairwise subreddit tables with the percent of shared users and TF-IDF text similarity metric (as described in section 2.3).  However, due to lack of time, we were unable to process these item-similarity metrics in Mahout and quantitatively evaluate them.  Table 2 lists the top 10 most similar subreddit pairs based on shared users, and you can subjectively see even from their titles that the subreddits are likely related.  
-
-\begin{table}[]
-\centering
-\caption{Item Similarity based on shared users}
-\label{my-label}
-\begin{tabular}{@{}lll@{}}
-\toprule
-sub\_a              & sub\_b          & \begin{tabular}[c]{@{}l@{}}percent sub\_a users \\ shared with sub\_b\end{tabular} \\ \midrule
-rotmgban            & RotMG           & 0.979592                                                                           \\
-MHOL                & MHOC            & 0.970588                                                                           \\
-ModelEasternState   & ModelUSGov      & 0.965517                                                                           \\
-FinishingTheMission & fireemblem      & 0.965517                                                                           \\
-Civcraft\_Olympics  & Civcraft        & 0.962963                                                                           \\
-amiiboSwapPoints    & amiiboSwap      & 0.962963                                                                           \\
-pokemonexchangeref  & Pokemonexchange & 0.96124                                                                            \\
-SRSMailbag          & ShitRedditSays  & 0.958333                                                                           \\
-radioheadfanfic     & radiohead       & 0.958333                                                                           \\
-metaboardgames      & boardgames      & 0.958333                                                                           \\ \bottomrule
-\end{tabular}
-\end{table}
-
 \section{Next Steps}\label{sec:qualitative-evaluations}
 
 For our results, we performed on the orders of hundreds of quantitative tests based mainly 
