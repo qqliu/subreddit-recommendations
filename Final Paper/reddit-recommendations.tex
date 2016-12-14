@@ -168,7 +168,7 @@ evaluator code provided by the Mahout package and by implementing our own testin
 
 \subsection{Similarity Measures}
 
-\paragraph{Pearson Correlation}
+\paragraph{Pearson Correlation}\footnote{https://archive.cloudera.com/cdh4/cdh/4/.../similarity/PearsonCorrelationSimilarity.html}
 
 The Pearson Correlation similarity measure looks at how similar data variation curves are from each other. 
 Specifically, given two items, we compute the following as the Pearson Correlation: \begin{align*}
@@ -195,7 +195,7 @@ only made comments in $2 \leq n \leq 3$ subreddits (see Section~\ref{2-3-users})
 Using Pearson correlation, the predicted values matched poorly
 with the actual values. Furthermore, by removing the top ranked item, the data becomes too sparse for the recommendation algorithm to retrieve any meaningful recommendations (at least by the precision and recall measures).
 
-\paragraph{Euclidean Distance}
+\paragraph{Euclidean Distance}\footnote{http://archive-primary.cloudera.com/cdh4/cdh/4/mahout-0.7-cdh4.3.2/mahout-core/org/apache/mahout/.../similarity/EuclideanDistanceSimilarity.html}
 
 This measure assumes items are dimensions and each user is a point in $\mathrm{R}^n$ where $n$ is the total
 number of ratable items. Then, for any two users, we compute the Euclidean distance between the two users.
@@ -208,12 +208,12 @@ where the $\sqrt{n}$ is meant to help correct against users with more ratings au
 the Euclidean distance metric does not have a problem with sparse data sets, although this similarity measure 
 performs better when all points have approximately the same number of dimensions. 
 
-\paragraph{Spearman Correlation}
+\paragraph{Spearman Correlation}\footnote{https://archive.cloudera.com/cdh4/cdh/4/mahout-0.7-cdh4.1.5/mahout-core/org/.../similarity/SpearmanCorrelationSimilarity.html}
 
 This measure is the same implementation as the Pearson correlation similarity except all preferences are ranked and the 
 rankings are used to compute the correlation value.
 
-\paragraph{Log Likelihood}
+\paragraph{Log Likelihood}\footnote{https://archive.cloudera.com/cdh4/cdh/4/mahout-0.7-cdh4.5.0/mahout-core/org/.../similarity/LogLikelihoodSimilarity.html}
 
 This similarity measure computes the log likelihood of two ratings appearing together using the following equation: given two items, $i$ and $j$, we can compute the number of users that have ratings for $i$ and $j$, $k_{i,j}$, the number of users
 who rated $i$ but not $j$, $k_{i,\overline{j}}$, the number of users who have rated $j$ but
@@ -231,7 +231,7 @@ interactions with items that do not have clear preferences. In fact, this simila
 for two probability distributions to be independent (i.e. how likely they are dependent), so higher values indicate 
 greater dependence and greater similarity.
 
-\paragraph{Tanimoto Coefficient}
+\paragraph{Tanimoto Coefficient}\footnote{https://archive.cloudera.com/cdh4/cdh/4/mahout-0.7-cdh4.5.0/mahout-core/org/.../similarity/TanimotoCoefficientSimilarity.html}
 
 The Tanimoto coefficient is another similarity measure meant for boolean
 data. Intuitively, it computes the fraction of items that are rated
@@ -362,16 +362,6 @@ We believe that the number of posts performs the best out of all datasets becaus
 shows greater preference for the subreddit than commenting on a subreddit. Furthermore, users
 make fewer posts to fewer subreddits resulting in less noise than the comment dataset. 
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{img/sim-on-files.pdf}
-\caption{Precision and recall due to different similarity measures that resulted in smallest
-root-mean-squared error on different feature maps. We see that the Pearson correlation
-similarity measure on the number of posts data file performs better
-than other similarity measures for other files in terms of precision and performs
-not much worse in terms of recall.}\label{fig:feature-map}
-\end{figure} 
-
 Furthermore, we analyze the effect of different parameters (such as neighborhood size and threshold value)
 on the precision and recall of recommender algorithms using 
  the Tanimoto coefficient and the Pearson correlation measure on the number of posts dataset. Here, 
@@ -381,6 +371,16 @@ on the precision and recall of recommender algorithms using
  precision and recall decreases as the user neighborhood increases beyond a certain point. It appears
  that $N = 50$ and $t = 0.25$ are parameters that are most favorable in terms of \emph{both precision
  and recall}.
+ 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{img/sim-on-files.pdf}
+\caption{Precision and recall due to different similarity measures that resulted in smallest
+root-mean-squared error on different feature maps. We see that the Pearson correlation
+similarity measure on the number of posts data file performs better
+than other similarity measures for other files in terms of precision and performs
+not much worse in terms of recall.}\label{fig:feature-map}
+\end{figure} 
 
 \begin{figure}[H]
 \centering
