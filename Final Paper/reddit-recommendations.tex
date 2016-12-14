@@ -315,8 +315,7 @@ greater the chance that preferences calculated by using the similarity measure m
 by the user by \emph{using a specific feature map}. We use the precision and recall to determine how correlated 
 user preferences are from this particular feature mapping. Note that since we use $0.9$ of the data for training
 and $0.01$ of the data for testing RMS error and $0.0001$ of the users for testing precision and recall, there
-could be variations in the number of users that are tested depending on how much data there is. However,
-we believe that this should not greatly affect our results. The number of users used for testing can be found in
+could be variations in the number of users that are tested depending on how much data there is. The number of users used for testing can be found in
 Table~\ref{results-basic}.
 
 We found through our tests that the feature map that resulted in the greatest precision and recall was the 
@@ -330,8 +329,7 @@ performance across datasets.
 
 We believe that the number of posts performs the best out of all datasets because posting in a subreddit
 shows greater preference for the subreddit than commenting on a subreddit. Furthermore, users
-make fewer posts to fewer subreddits resulting in less noise than a dataset that has users
-make the same ratings for a lot of different items. 
+make fewer posts to fewer subreddits resulting in less noise than the comment dataset. 
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{img/sim-on-files.pdf}
@@ -367,7 +365,7 @@ Tanimoto coefficient.}\label{fig:learning-rate-hidden-layers}
 
 \subsection{Different Normalization Results}\label{sec:different-normalization}
 
-We use the normalization methods mentioned in Section~\ref{sec:data-prepros}. We see that both NC-TFIDF and NP-TFIDF perform worse than NC and NP in terms of precision and recall. We can see these 
+Using the normalization methods mentioned in Section~\ref{sec:data-prepros}, we see that both NC-TFIDF and NP-TFIDF perform worse than NC and NP in terms of precision and recall. We can see these 
 results in Fig.~\ref{tfid-f-p} where we see the precision and recall of NP-TFIDF and NP given user neighborhoods
 $N =10, 50$ and $T = 0.1, 0.5$ and varying $H$. However, we see that both the logarithm normalization 
 perform better than the original dataset as can be seen In Fig.~\ref{varying-log-gaussian}, while (as expected), 
@@ -375,13 +373,12 @@ the Gaussian normalization performs as well (approximately the same) as the orig
  
 \subsection{Segmentation of Comments and Posts}\label{sec:set-com-posts}
 
-We find that segmenting the comments and posts into smaller groups and then, using a different similarity measure
-and collaborative filtering algorithm for each segment performed better by both our quantitative and qualitative
-measure than by feeding a large data set \emph{that is not segmented} into a recommender. For this procedure, 
+We find that segmenting the comments and posts into smaller groups and applying a different similarity measure
+and collaborative filtering algorithm for each segment performed better than  feeding a large data set \emph{that is not segmented} into a recommender. For this procedure, 
 we test against the NC dataset since it contains the most number of ratings and the greatest variance
 in terms of the number of subreddits that users contributed to. We segment the ratings into the following segments: 
-ratings from users who contribute to [2, 3] subreddits, [4, 6] subreddits, [6, 15] subreddits, [15, 25], subreddits, [25, 50] 
-subreddits, and, finally, [50-1000] subreddits. We see that as we believed, segmenting the dataset
+ratings from users who contribute to [2, 3] subreddits, [4, 6] subreddits, [6, 15] subreddits, [15, 25] subreddits, [25, 50] 
+subreddits, and, finally, [50-1000] subreddits. We see that segmenting the dataset
 resulted in greater precision and recall than the original NC dataset. Furthermore, different similarity 
 measures and recommender algorithm parameters performed better in each segment. 
 
