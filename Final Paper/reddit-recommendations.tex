@@ -304,6 +304,20 @@ The results we obtain can be found in the following table:
 \begin{longtable}{ |p{1.7cm}|p{1.9cm}|p{1.5cm}|p{1.5cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{0.75cm}|p{1.5cm}|p{1.5cm}|}
     \hline
     File & Sim Measure & \# Training & \# Testing & $N$ & $T$ & $H$ & RMS Err & Precision & Recall \\ \hline\hline
+    NC & Pearson & 4244356 & 47159 & 50 & N/A & N/A & 0.398 & N/A & N/A  \\ \hline
+    NC  & Euc Dist & 4244356 & 47159 & 50 & N/A & N/A & 0.403 & N/A & N/A   \\ \hline
+    NC  & Log & 4244356 & 47159  & N/A &  50 & N/A& 0.399 & N/A & N/A  \\ \hline
+    NC  & Spearman & 4244356 & 47159  & 50 & N/A & 0.404 & N/A & N/A & N/A \\ \hline
+    NC  & Tanimoto & 4244356 & 47159 & 50 & N/A& N/A & 0.391 & N/A & N/A \\ \hline
+    NC  & Log & 4244356 & 47159 & 50 & N/A& N/A & 0.301 (Avg) & N/A & N/A \\ \hline
+    NC  & Tanimoto & 4244356 & 4719 & 50 & N/A & N/A & 0.316 (Avg) & N/A & N/A \\ \hline
+    
+    NC  & Pearson & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.029 & 0.0357  \\ \hline
+    NC  & Euc Dist & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.016 & 0.032   \\ \hline
+    NC  & Log & 4244356 & 471& 50 & N/A & 2 & N/A & 0.063 & 0.041  \\ \hline
+    NC  & Spearman & 4244356 & 471 & 50 & N/A  & 2 & N/A &0.046 & 0.070 \\ \hline
+    NC  & Tanimoto & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.078 & 0.106 \\ \hline
+    
     NC-TFIDF & Pearson & 4244356 & 47159 & 10 & N/A & N/A & 0.394 & N/A & N/A  \\ \hline
     NC-TFIDF  & Euc Dist & 4244356 & 47159 & 10 & N/A & N/A & 0.342 & N/A & N/A   \\ \hline
     NC-TFIDF  & Log & 4244356 & 47159  & N/A &  10 & N/A& 0.353 & N/A & N/A  \\ \hline
@@ -718,7 +732,7 @@ The results we obtain can be found in the following table:
     NC-TFIDF (Log)  & Tanimoto & 4244356 & 471 & 50 & N/A  & 2 & N/A & 0.0 & 0.0 \\ \hline
 
     ACL & Pearson & 4244356 & 47159 & 10 & N/A & N/A & 0.376 & N/A & N/A  \\ \hline
-    ACLACL & Euc Dist & 4244356 & 47159 & 10 & N/A & N/A & 0.399 & N/A & N/A   \\ \hline
+    ACL & Euc Dist & 4244356 & 47159 & 10 & N/A & N/A & 0.399 & N/A & N/A   \\ \hline
     ACL & Log & 4244356 & 47159 & N/A &  10 & N/A& 0.361 & N/A & N/A  \\ \hline
     ACL & Spearman & 4244356 & 47159 & 10 & N/A & 0.401 & N/A & N/A & N/A \\ \hline
     ACL & Tanimoto & 4244356 & 47159 & 10 & N/A& N/A & 0.347 & N/A & N/A \\ \hline
