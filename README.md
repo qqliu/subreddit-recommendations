@@ -1,4 +1,4 @@
-#Recommending Subreddits to Reddit Users 
+# Recommending Subreddits to Reddit Users 
 
 Jessamyn Liu and Quanquan Liu
 
